@@ -47,13 +47,15 @@ const getUserByCredentials = async (req, res) => {
 // POST
 const addUser = async (req, res) => {
     try {
-        let user = await User.create({
-            id: req.body.id,
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
-            is_admin: req.body.is_admin,
-            estimated_ability: 0,
-            email: req.body.email,
+        let user = await User.findOrCreate({
+            where: { email: req.body.email },
+            defaults: {
+                id: req.body.id,
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                is_admin: req.body.is_admin,
+                estimated_ability: 0,
+            },
         });
         res.status(200).send(user);
     } catch (err) {
