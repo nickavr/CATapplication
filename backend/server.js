@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 const PORT = process.env.PORT || require('./config/config.json').port;
 const model = require('./models');
+const path = require('path');
 
 //DB authentification
 model.sequelize
