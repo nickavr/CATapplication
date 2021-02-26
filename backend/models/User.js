@@ -13,11 +13,13 @@ module.exports = (sequelize, DataTypes) => {
             estimated_ability: {
                 type: DataTypes.FLOAT,
                 required: true,
+                defaultValue: 0,
             },
             is_admin: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
                 required: true,
+                defaultValue: false,
             },
             email: {
                 type: DataTypes.STRING,
