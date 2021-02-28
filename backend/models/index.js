@@ -39,3 +39,12 @@ Choice.belongsTo(Question, { onDelete: 'cascade' });
 //choice -> userAnswear (1:1) for faster validation of the correct answear
 UserAnswear.hasOne(Choice, { onDelete: 'cascade' });
 Choice.belongsTo(UserAnswear, { onDelete: 'cascade' });
+
+module.exports = {
+    sequelize,
+    User,
+    UserAnswear,
+    Question,
+    Choice,
+    Test,
+};
