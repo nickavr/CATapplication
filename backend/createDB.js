@@ -10,7 +10,9 @@ mysql
     })
     .then(connection => {
         conn = connection;
-        return connection.query('CREATE DATABASE IF NOT EXISTS tw_exam');
+        return connection.query(
+            'CREATE DATABASE IF NOT EXISTS cat_application'
+        );
     })
     .then(() => {
         return conn.end();
