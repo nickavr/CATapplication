@@ -1,6 +1,4 @@
-const { Sequelize } = require('sequelize');
-let config = require('../config/config.json');
-
+let config = require('./config/config.json');
 const mysql = require('mysql2/promise');
 
 let conn;
@@ -22,15 +20,3 @@ mysql
     .catch(err => {
         console.warn(err.stack);
     });
-
-const sequelize = new Sequelize(
-    'cat_application',
-    config.db_user,
-    config.db_pass,
-    {
-        host: config.host,
-        dialect: 'mysql',
-    }
-);
-
-module.exports = sequelize;
