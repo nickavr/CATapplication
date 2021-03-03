@@ -7,6 +7,7 @@ const model = require('./models');
 const path = require('path');
 const routes = require('./routes');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 //DB authentification
 model.sequelize
@@ -24,16 +25,6 @@ model.sequelize.sync();
 // If we have modification for the tables
 // model.sequelize.sync({ alter: true });
 
-// testing the server
-// app.get('/', (req, res) => {
-//     res.send('Server is working');
-// });
-
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-// });
-
-//
 const public = path.join(__dirname, '../frontend/public');
 app.use(cors());
 app.use('/api', routes);
@@ -44,6 +35,7 @@ app.use('/', express.static(public));
 // });
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.listen(PORT, () => {

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LandingPage from './containers/LandingPage/LandingPage';
-import HomePage from './containers/admin/HomePage/HomePage';
+import HomePage from './containers/HomePage/HomePage';
 
 export default function Routes() {
     return (
