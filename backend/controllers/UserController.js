@@ -53,11 +53,12 @@ const addUser = async (req, res) => {
                 id: req.body.id,
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
-                is_admin: req.body.is_admin,
                 estimated_ability: 0,
+                is_admin: req.body.is_admin,
+                email: req.body.email,
             },
         });
-        res.status(200).send(user);
+        return res.status(200).send(user);
     } catch (err) {
         return res.status(500).send(err);
     }

@@ -10,14 +10,16 @@ const API_BASE_URL = process.env.APP_BASE_URL_API;
 function LandingPage(props) {
     const responseGoogleOnSuccess = response => {
         console.log(response.Is.ot);
-        // console.log(response.tokenId);
-        console.log(API_BASE_URL);
-
+        console.log(response.tokenId);
         axios
             .post(
-                'http://localhost:3001/api' + '/login',
+                'http://localhost:8080/api' + '/login',
                 { token: response.tokenId },
-                { headers: { 'Content-Type': 'application/json' } }
+                {
+                    headers: {
+                        'Content-Type': 'application/JSON',
+                    },
+                }
             )
             .then(res => {
                 console.log(res);
@@ -53,7 +55,6 @@ function LandingPage(props) {
                     clientId={credentials.clientID}
                     buttonText="Login"
                     onSuccess={responseGoogleOnSuccess}
-                    redirectUri="/home"
                     onFailure={responseGoogleOnFailure}
                     cookiePolicy={'single_host_origin'}
                     isSignedIn={true}
