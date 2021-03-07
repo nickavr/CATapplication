@@ -1,23 +1,16 @@
 const express = require('express');
 const router = express();
 const userController = require('../controllers/UserController');
+const loginController = require('../controllers/LoginController');
 
 //LOGIN:
-router.post('/login', async (req, res) => {
-    try {
-        let token = req.body.token;
-        console.log(token);
-        return res.status(200).send(token);
-    } catch (err) {
-        return res.status(500).send(err);
-    }
-});
+router.post('/login', loginController.loginAuth);
 
 //USER:
 router.get('/users', userController.getAllUsers);
 router.get('/users/credentials', userController.getUserByCredentials);
 router.get('/users/:id', userController.getUserById);
 router.put('/users/:id', userController.editUser);
-router.post('/users', userController.addUser);
+router.post('/users', userController.addUser); //for testing
 
 module.exports = router;

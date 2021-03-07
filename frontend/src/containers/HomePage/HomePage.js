@@ -18,6 +18,7 @@ const HomePage = function (props) {
                 clientId={credentials.clientID}
                 buttonText="Logout"
                 onLogoutSuccess={logout}
+                signOut={true}
             ></GoogleLogout>
         </>
     );

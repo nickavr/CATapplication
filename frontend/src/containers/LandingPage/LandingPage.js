@@ -6,11 +6,14 @@ import './LandingPage.css';
 
 let credentials = require('../../config/google-credentials.json');
 const API_BASE_URL = process.env.APP_BASE_URL_API;
+//FIXME: env links not visible
 
 function LandingPage(props) {
     const responseGoogleOnSuccess = response => {
         console.log(response.Is.ot);
-        console.log(response.tokenId);
+        // console.log(response.tokenId);
+        console.log(API_BASE_URL);
+
         axios
             .post(
                 'http://localhost:8080/api' + '/login',
@@ -22,7 +25,7 @@ function LandingPage(props) {
                 }
             )
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 cogoToast.success('Login Successful', {
                     hideAfter: 4,
                     position: 'top-center',

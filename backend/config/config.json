@@ -1,5 +1,6 @@
 {
     "db_user": "root",
     "db_pass": "password",
-    "port": 8080
+    "port": 8080,
+    "clientID": "322753503545-lp8vbc3i1lb0ijej1n4qirlbt8lcc2cj.apps.googleusercontent.com"
 }

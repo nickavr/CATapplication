@@ -44,7 +44,7 @@ const getUserByCredentials = async (req, res) => {
     }
 };
 
-// POST
+// POST addUser -> at login controller, after token is validated.
 const addUser = async (req, res) => {
     try {
         let user = await User.findOrCreate({
