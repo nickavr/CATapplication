@@ -3,12 +3,11 @@ import { GoogleLogin } from 'react-google-login';
 import axios from 'axios';
 import cogoToast from 'cogo-toast';
 import './LandingPage.css';
-
 let credentials = require('../../config/google-credentials.json');
 const API_BASE_URL = process.env.APP_BASE_URL_API;
 //FIXME: env links not visible
 
-function LandingPage(props) {
+function LandingPage(props, context) {
     const responseGoogleOnSuccess = response => {
         console.log(response.Is.ot);
         // console.log(response.tokenId);
@@ -31,6 +30,7 @@ function LandingPage(props) {
                     position: 'top-center',
                     heading: 'Welcome!',
                 });
+                localStorage.setItem('currentUser', res.data);
                 props.history.push('/home');
             })
             .catch(err => {
@@ -39,7 +39,6 @@ function LandingPage(props) {
     };
 
     const responseGoogleOnFailure = response => {
-        console.log(response.Is.ot);
         cogoToast.warn('Failed login', {
             hideAfter: 4,
             position: 'top-center',

@@ -8,6 +8,7 @@ const loginAuth = async (req, res) => {
     try {
         let token = req.body.token;
         let isAdmin = false;
+        let user = null;
         console.log(token);
         async function verify() {
             const ticket = await client.verifyIdToken({
@@ -20,7 +21,7 @@ const loginAuth = async (req, res) => {
             console.log(payload);
 
             //adding user in db if he is not
-            await User.findOrCreate({
+            user = await User.findOrCreate({
                 where: { email: payload['email'] },
                 defaults: {
                     first_name: payload['given_name'],
@@ -33,11 +34,9 @@ const loginAuth = async (req, res) => {
         }
         verify()
             .then(() => {
-                res.cookie('session-token', token); //TODO: finish user checking with cookies
+                res.status(200).json(user);
             })
-            .catch(console.error);
-
-        return res.status(200).send('Login successful');
+            .catch(err => res.redirect('/'));
     } catch (err) {
         return res.status(500).send(err);
     }

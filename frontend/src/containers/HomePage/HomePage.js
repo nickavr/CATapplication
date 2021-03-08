@@ -1,12 +1,14 @@
 import './HomePage.css';
 import React from 'react';
+import axios from 'axios';
 import { GoogleLogout } from 'react-google-login';
+let userService = require('../../Services/UserService');
 
 let credentials = require('../../config/google-credentials.json');
 
 const HomePage = function (props) {
     const logout = res => {
-        console.log(res);
+        userService.emptyLocalStorage();
         props.history.push('/');
     };
 
