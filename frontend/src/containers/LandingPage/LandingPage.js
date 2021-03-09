@@ -10,6 +10,15 @@ const API_BASE_URL = process.env.APP_BASE_URL_API;
 function LandingPage(props, context) {
     const responseGoogleOnSuccess = response => {
         console.log(response.Is.ot);
+        //TODO: uncomment validation for only accepting institutional emails:
+        // if (!response.Is.ot.includes('ase')) {
+        //     cogoToast.warn('Failed login', {
+        //         hideAfter: 4,
+        //         position: 'top-center',
+        //         heading: 'Use Institutional email',
+        //     });
+        //     return 0;
+        // }
         // console.log(response.tokenId);
         console.log(API_BASE_URL);
 
