@@ -1,0 +1,4 @@
+.env
+backend/config/config.json
+frontend/src/config/google-credentials.json
+frontend/src/config/url-info.json

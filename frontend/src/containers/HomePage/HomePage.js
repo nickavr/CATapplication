@@ -7,6 +7,9 @@ let userService = require('../../Services/UserService');
 let credentials = require('../../config/google-credentials.json');
 
 const HomePage = function (props) {
+    let user = JSON.parse(localStorage.getItem('currentUser'));
+    console.log(user);
+
     const logout = res => {
         userService.emptyLocalStorage();
         props.history.push('/');

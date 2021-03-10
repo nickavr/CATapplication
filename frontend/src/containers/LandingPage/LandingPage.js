@@ -33,13 +33,16 @@ function LandingPage(props, context) {
                 }
             )
             .then(res => {
-                // console.log(res);
+                // console.log(res.data[0]);
                 cogoToast.success('Login Successful', {
                     hideAfter: 4,
                     position: 'top-center',
                     heading: 'Welcome!',
                 });
-                localStorage.setItem('currentUser', res.data);
+                localStorage.setItem(
+                    'currentUser',
+                    JSON.stringify(res.data[0])
+                );
                 props.history.push('/home');
             })
             .catch(err => {
