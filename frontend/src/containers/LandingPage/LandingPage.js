@@ -4,7 +4,7 @@ import axios from 'axios';
 import cogoToast from 'cogo-toast';
 import './LandingPage.css';
 let credentials = require('../../config/google-credentials.json');
-const API_BASE_URL = process.env.APP_BASE_URL_API;
+const URL = require('../../config/url-info.json');
 //FIXME: env links not visible
 
 function LandingPage(props, context) {
@@ -20,11 +20,10 @@ function LandingPage(props, context) {
         //     return 0;
         // }
         // console.log(response.tokenId);
-        console.log(API_BASE_URL);
 
         axios
             .post(
-                'http://localhost:8080/api' + '/login',
+                URL.API_BASE_URL + '/login',
                 { token: response.tokenId },
                 {
                     headers: {
