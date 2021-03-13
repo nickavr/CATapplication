@@ -9,7 +9,7 @@ const URL = require('../../config/url-info.json');
 
 function LandingPage(props, context) {
     const responseGoogleOnSuccess = response => {
-        console.log(response.Is.ot);
+        console.log(response);
         //TODO: uncomment validation for only accepting institutional emails:
         // if (!response.Is.ot.includes('ase')) {
         //     cogoToast.warn('Failed login', {

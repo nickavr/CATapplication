@@ -1,1 +1,9 @@
 /* TODO: complete home page style */
+.home {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--accent-color);
+    display: flex;
+    justify-content: center;
+    font-size: xx-large;
+}
