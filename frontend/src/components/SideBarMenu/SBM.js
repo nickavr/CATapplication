@@ -3,21 +3,22 @@ import { Link } from 'react-router-dom';
 import * as Ai from 'react-icons/ai';
 import { SidebarData } from './SidebarData';
 import { GoogleLogout } from 'react-google-login';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import './SBM.css';
 let credentials = require('../../config/google-credentials.json');
 let userService = require('../../Services/UserService');
+
 // TODO: filter menu elements according to admin/examinee
-//FIXME: logout bug -> click logout and then need to click home or X
+
 const SideMenu = props => {
     const [sidebarShow, setSideBarShow] = useState(false);
-    const { history } = props;
+    console.log(props);
 
     const handleSidebarVisibility = () => setSideBarShow(!sidebarShow);
 
     const logout = res => {
         userService.emptyLocalStorage();
-        history.push('/');
+        props.history.push('/');
     };
 
     return (
@@ -39,7 +40,10 @@ const SideMenu = props => {
                     {SidebarData.map((item, index) => {
                         return (
                             <li key={index} className={item.colName}>
-                                <Link to={item.path}>
+                                <Link
+                                    to={item.path}
+                                    onClick={handleSidebarVisibility}
+                                >
                                     {item.icon}
                                     <span>{item.title}</span>
                                 </Link>
@@ -61,4 +65,4 @@ const SideMenu = props => {
     );
 };
 
-export default SideMenu;
+export default withRouter(SideMenu);

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const HomePage = function (props) {
     let user = JSON.parse(localStorage.getItem('currentUser'));
-    console.log(user);
+    // console.log(user);
 
     return (
         <>
