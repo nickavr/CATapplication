@@ -19,17 +19,8 @@ const loginAuth = async (req, res) => {
             const payload = ticket.getPayload();
 
             //adding user in db if he is not
-            user = await User.findOrCreate({
-                where: { email: payload['email'] },
-                defaults: {
-                    first_name: payload['given_name'],
-                    last_name: payload['family_name'],
-                    estimated_ability: 0,
-                    email: payload['email'],
-                },
-            });
-
-            user['userRoles'] = userRoles;
+            user = await userController.addUser(payload);
+            // console.log(user);
         }
         verify()
             .then(() => {

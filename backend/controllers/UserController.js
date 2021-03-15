@@ -45,21 +45,49 @@ const getUserByCredentials = async (req, res) => {
 };
 
 // POST addUser -> at login controller, after token is validated.
-const addUser = async (req, res) => {
+const addUser = async userData => {
+    let allRoles = await roleController.getAllRoles();
+    // console.log(allRoles);
+
     let userRoles = [];
+    if (userData.email.includes('stud')) {
+        userRoles = allRoles.filter(role => {
+            return role.dataValues.role_name.toString() === 'examinee';
+        });
+    } else {
+        userRoles = allRoles.filter(role => {
+            return role.dataValues.role_name.toString() !== 'examinee';
+        });
+    }
+
     try {
         let user = await User.findOrCreate({
-            where: { email: req.body.email },
+            where: { email: userData.email },
             defaults: {
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
+                first_name: userData.given_name,
+                last_name: userData.family_name,
                 estimated_ability: 0,
-                email: req.body.email,
+                email: userData.email,
             },
         });
-        return res.status(200).send(user);
+
+        //TODO: modify if, in order to enter only if you added the user to db
+        if (user) {
+            for (const role of userRoles) {
+                // console.log(user.id);
+                await roleController.addUserToRole(
+                    user[0].dataValues.id,
+                    role.dataValues.id
+                );
+            }
+        }
+
+        user[0].dataValues['userRoles'] = userRoles;
+        // console.log(user);
+
+        return user;
     } catch (err) {
-        return res.status(500).send(err);
+        return err.message;
     }
 };
 

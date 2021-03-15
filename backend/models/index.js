@@ -25,6 +25,10 @@ const Role = require(path.join(__dirname, './Role.js'))(
     sequelize,
     Sequelize.DataTypes
 );
+const UserRole = require(path.join(__dirname, './UserRole.js'))(
+    sequelize,
+    Sequelize.DataTypes
+);
 
 //users -> tests (1:M)
 Test.belongsTo(User, { onDelete: 'cascade' });
@@ -53,4 +57,6 @@ module.exports = {
     Question,
     Choice,
     Test,
+    Role,
+    UserRole,
 };
