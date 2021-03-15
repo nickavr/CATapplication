@@ -21,16 +21,22 @@ const Test = require(path.join(__dirname, './Test.js'))(
     sequelize,
     Sequelize.DataTypes
 );
+const Role = require(path.join(__dirname, './Role.js'))(
+    sequelize,
+    Sequelize.DataTypes
+);
 
 //users -> tests (1:M)
 Test.belongsTo(User, { onDelete: 'cascade' });
 User.hasMany(Test, { onDelete: 'cascade' });
 
+//users -> roles (M:M)
+User.belongsToMany(Role, { through: 'user_role' });
+Role.belongsToMany(User, { through: 'user_role' });
+
 //users -> questions (M:M) through user_answear
-UserAnswear.belongsTo(User, { onDelete: 'cascade' });
-User.hasMany(UserAnswear, { onDelete: 'cascade' });
-UserAnswear.belongsTo(Question, { onDelete: 'cascade' });
-Question.hasMany(UserAnswear, { onDelete: 'cascade' });
+User.belongsToMany(Question, { through: 'user_answear' });
+Question.belongsToMany(User, { through: 'user_answear' });
 
 //questions -> choices (1:M)
 Question.hasMany(Choice, { onDelete: 'cascade' });

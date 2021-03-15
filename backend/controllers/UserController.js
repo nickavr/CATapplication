@@ -1,5 +1,5 @@
 const User = require('../models').User;
-
+const roleController = require('./RoleController');
 // GET
 const getAllUsers = async (req, res) => {
     try {
@@ -46,15 +46,14 @@ const getUserByCredentials = async (req, res) => {
 
 // POST addUser -> at login controller, after token is validated.
 const addUser = async (req, res) => {
+    let userRoles = [];
     try {
         let user = await User.findOrCreate({
             where: { email: req.body.email },
             defaults: {
-                id: req.body.id,
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 estimated_ability: 0,
-                is_admin: req.body.is_admin,
                 email: req.body.email,
             },
         });
