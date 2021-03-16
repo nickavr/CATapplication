@@ -21,9 +21,9 @@ model.sequelize
     });
 
 // Standard
-model.sequelize.sync();
+// model.sequelize.sync();
 // If we have modification for the tables
-// model.sequelize.sync({ force: true });
+model.sequelize.sync({ force: true });
 
 const public = path.join(__dirname, '../frontend/public');
 app.use(cors());

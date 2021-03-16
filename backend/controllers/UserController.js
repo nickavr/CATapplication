@@ -61,20 +61,20 @@ const addUser = async userData => {
     }
 
     try {
-        let user = await User.findOrCreate({
-            where: { email: userData.email },
-            defaults: {
-                first_name: userData.given_name,
-                last_name: userData.family_name,
-                estimated_ability: 0,
-                email: userData.email,
-            },
-        });
+        let user = await User.findOne({ where: { email: userData.email } });
 
-        //TODO: modify if, in order to enter only if you added the user to db
-        if (user) {
+        if (!user) {
+            user = await User.findOrCreate({
+                where: { email: userData.email },
+                defaults: {
+                    first_name: userData.given_name,
+                    last_name: userData.family_name,
+                    estimated_ability: 3,
+                    email: userData.email,
+                },
+            });
+
             for (const role of userRoles) {
-                // console.log(user.id);
                 await roleController.addUserToRole(
                     user[0].dataValues.id,
                     role.dataValues.id
@@ -83,8 +83,6 @@ const addUser = async userData => {
         }
 
         user[0].dataValues['userRoles'] = userRoles;
-        // console.log(user);
-
         return user;
     } catch (err) {
         return err.message;

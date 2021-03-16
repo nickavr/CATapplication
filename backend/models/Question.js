@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
                 required: true,
                 defaultValue: 0,
             },
+            image: {
+                type: DataTypes.STRING,
+            },
         },
         {
             underscored: true,
