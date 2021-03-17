@@ -1,7 +1,7 @@
 const { Sequelize } = require('./db.js');
 let sequelize = require('./db.js');
 const path = require('path');
-const UserAnswear = require(path.join(__dirname, './UserAnswear.js'))(
+const UserAnswer = require(path.join(__dirname, './UserAnswer.js'))(
     sequelize,
     Sequelize.DataTypes
 );
@@ -30,6 +30,11 @@ const UserRole = require(path.join(__dirname, './UserRole.js'))(
     Sequelize.DataTypes
 );
 
+const Topic = require(path.join(__dirname, './Topic.js'))(
+    sequelize,
+    Sequelize.DataTypes
+);
+
 //users -> tests (1:M)
 Test.belongsTo(User, { onDelete: 'cascade' });
 User.hasMany(Test, { onDelete: 'cascade' });
@@ -39,24 +44,29 @@ User.belongsToMany(Role, { through: 'user_role' });
 Role.belongsToMany(User, { through: 'user_role' });
 
 //users -> questions (M:M) through user_answear
-User.belongsToMany(Question, { through: 'user_answear' });
-Question.belongsToMany(User, { through: 'user_answear' });
+User.belongsToMany(Question, { through: 'user_answer' });
+Question.belongsToMany(User, { through: 'user_answer' });
+
+//topics -> questions (1:M)
+Topic.hasMany(Question, { onDelete: 'cascade' });
+Question.belongsTo(Topic, { onDelete: 'cascade' });
 
 //questions -> choices (1:M)
 Question.hasMany(Choice, { onDelete: 'cascade' });
 Choice.belongsTo(Question, { onDelete: 'cascade' });
 
-//choice -> userAnswear (1:1) for faster validation of the correct answear
-UserAnswear.hasOne(Choice, { onDelete: 'cascade' });
-Choice.belongsTo(UserAnswear, { onDelete: 'cascade' });
+//choice -> userAnswer (1:1) for faster validation of the correct answer
+Choice.hasOne(UserAnswer, { onDelete: 'cascade' });
+UserAnswer.belongsTo(Choice, { onDelete: 'cascade' });
 
 module.exports = {
     sequelize,
     User,
-    UserAnswear,
+    UserAnswer,
     Question,
     Choice,
     Test,
     Role,
     UserRole,
+    Topic,
 };

@@ -2,6 +2,9 @@ module.exports = (sequelize, DataTypes) => {
     return sequelize.define(
         'question',
         {
+            topicId: {
+                type: DataTypes.INTEGER,
+            },
             question_text: {
                 type: DataTypes.STRING,
                 allowNull: false,
