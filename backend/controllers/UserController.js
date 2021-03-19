@@ -47,7 +47,6 @@ const getUserByCredentials = async (req, res) => {
 // POST addUser -> at login controller, after token is validated.
 const addUser = async userData => {
     let allRoles = await roleController.getAllRoles();
-    // console.log(allRoles);
 
     let userRoles = [];
     if (userData.email.includes('stud')) {
@@ -64,25 +63,27 @@ const addUser = async userData => {
         let user = await User.findOne({ where: { email: userData.email } });
 
         if (!user) {
-            user = await User.findOrCreate({
-                where: { email: userData.email },
-                defaults: {
-                    first_name: userData.given_name,
-                    last_name: userData.family_name,
-                    estimated_ability: 3,
-                    email: userData.email,
-                },
+            user = await User.create({
+                first_name: userData.given_name,
+                last_name: userData.family_name,
+                estimated_ability: 3,
+                email: userData.email,
             });
 
             for (const role of userRoles) {
                 await roleController.addUserToRole(
-                    user[0].dataValues.id,
+                    user.dataValues.id,
                     role.dataValues.id
                 );
             }
         }
 
-        user[0].dataValues['userRoles'] = userRoles;
+        try {
+            user.dataValues['userRoles'] = userRoles;
+        } catch (err) {
+            console.log(err.message);
+        }
+
         return user;
     } catch (err) {
         return err.message;

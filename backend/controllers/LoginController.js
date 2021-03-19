@@ -6,6 +6,8 @@ const User = require('../models').User;
 const userController = require('./UserController');
 const roleController = require('./RoleController');
 
+//TODO: refactor login controller => use google auth midleware
+
 const loginAuth = async (req, res) => {
     try {
         let token = req.body.token;
@@ -20,11 +22,10 @@ const loginAuth = async (req, res) => {
 
             //adding user in db if he is not
             user = await userController.addUser(payload);
-            // console.log(user);
         }
         verify()
             .then(() => {
-                res.status(200).json(user);
+                res.status(200).json(user.dataValues);
             })
             .catch(err => res.redirect('/'));
     } catch (err) {
