@@ -10,7 +10,8 @@ export const SidebarData = [
         path: '/home',
         icon: <Ai.AiFillHome />,
         colName: 'nav-text',
-        forAnyone: true,
+        status: 'general',
+        display: true,
     },
     // examinee
     {
@@ -18,14 +19,16 @@ export const SidebarData = [
         path: '/join-test',
         icon: <Md.MdAssignment />,
         colName: 'nav-text',
-        forAdmin: false,
+        status: 'examinee',
+        display: false,
     },
     {
         title: 'Analytics',
         path: '/analytics',
         icon: <Io.IoMdAnalytics />,
         colName: 'nav-text',
-        forAdmin: false,
+        status: 'examinee',
+        display: false,
     },
     // Admin
     {
@@ -33,13 +36,15 @@ export const SidebarData = [
         path: '/start-test',
         icon: <Io.IoMdFastforward />,
         colName: 'nav-text',
-        forAdmin: true,
+        status: 'examiner',
+        display: false,
     },
     {
         title: 'Statistics',
         path: '/statistics',
         icon: <Io.IoIosPie />,
         colName: 'nav-text',
-        forAdmin: true,
+        status: 'examiner',
+        display: false,
     },
 ];

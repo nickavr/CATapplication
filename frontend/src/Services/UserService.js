@@ -3,8 +3,7 @@ let emptyLocalStorage = function () {
 };
 
 let getUserFromStorage = () => {
-    let user = JSON.parse(localStorage.getItem('currentUser'));
-    return user;
+    return JSON.parse(localStorage.getItem('currentUser'));
 };
 
 let userIsLogged = () => {
@@ -15,8 +14,15 @@ let userIsLogged = () => {
     return check;
 };
 
+let getUserStatus = () => {
+    let statusArray = JSON.parse(localStorage.getItem('currentUser')).userRoles;
+    //setTimeout(() => (statusArray = currentUser.userRoles), 300);
+    return statusArray;
+};
+
 module.exports = {
     emptyLocalStorage,
     getUserFromStorage,
     userIsLogged,
+    getUserStatus,
 };
