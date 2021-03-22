@@ -1,6 +1,25 @@
 const User = require('../models').User;
+const Role = require('../models').Role;
 const roleController = require('./RoleController');
 // GET
+const getAllExaminees = async (req, res) => {
+    try {
+        let examineesArray = await User.findAll({
+            attributes: ['id', 'email'],
+            include: {
+                model: Role,
+                attributes: [],
+                where: {
+                    role_name: 'examinee',
+                },
+            },
+        });
+        res.status(200).json(examineesArray);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};
+
 const getAllUsers = async (req, res) => {
     try {
         await User.findAll().then(allUsers => {
@@ -111,6 +130,7 @@ const editUser = async (req, res) => {
 };
 
 module.exports = {
+    getAllExaminees,
     getAllUsers,
     getUserByCredentials,
     getUserById,

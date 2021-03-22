@@ -1,0 +1,22 @@
+.start-test-form {
+    display: flexbox;
+    margin: 5% auto;
+    width: 30%;
+}
+
+/* Overriding element hover from multiple select */
+.optionContainer li:hover,
+.optionContainer .highlight {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+.btn-signin {
+    background-color: var(--accent-color);
+    transition: all 0.2s;
+    border: #fff !important;
+}
+
+.btn-signin:hover {
+    background-color: var(--accent-color-dark);
+}

@@ -8,6 +8,7 @@ const roleController = require('../controllers/RoleController');
 router.post('/login', loginController.loginAuth);
 
 //USER:
+router.get('/users/examinees', userController.getAllExaminees);
 router.get('/users', userController.getAllUsers);
 router.get('/users/credentials', userController.getUserByCredentials);
 router.get('/users/:id', userController.getUserById);

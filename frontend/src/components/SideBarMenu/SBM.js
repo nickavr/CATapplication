@@ -8,9 +8,6 @@ import './SBM.css';
 let credentials = require('../../config/google-credentials.json');
 let userService = require('../../Services/UserService');
 
-// TODO: filter menu elements according to admin/examinee
-let userStatusArray = userService.getUserStatus();
-
 let setSbDataDisplayStatus = () => {
     SidebarData.forEach(elem =>
         elem.status !== 'general'
@@ -21,10 +18,7 @@ let setSbDataDisplayStatus = () => {
 
 function SideMenu(props) {
     const [sidebarShow, setSideBarShow] = useState(false);
-    useEffect(() => {
-        console.log(userService.getUserStatus());
-        userStatusArray = userService.getUserStatus();
-    });
+    let userStatusArray = userService.getUserStatus();
 
     const handleSidebarVisibility = () => setSideBarShow(!sidebarShow);
 
