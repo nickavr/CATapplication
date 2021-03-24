@@ -3,6 +3,7 @@ import LandingPage from './containers/LandingPage/LandingPage';
 import HomePage from './containers/HomePage/HomePage';
 import StartTestPage from './containers/StartTestPage/StartTestPage';
 import StartTestPageSecond from './containers/StartTestPage/StartTestPageSecond';
+import JoinTestPage from './containers/JoinTestPage/JoinTestPage';
 import SideMenu from './components/SideBarMenu/SBM';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -25,9 +26,9 @@ export default function Routes() {
                             component={StartTestPage}
                         ></ProtectedRoute>
                         <ProtectedRoute
-                            path="/start-test2"
+                            path="/join-test"
                             exact
-                            component={StartTestPageSecond}
+                            component={JoinTestPage}
                         ></ProtectedRoute>
                     </Switch>
                 </div>

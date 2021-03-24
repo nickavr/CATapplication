@@ -14,9 +14,11 @@
 .btn-signin {
     background-color: var(--accent-color);
     transition: all 0.2s;
+    color: #fff;
     border: #fff !important;
 }
 
-.btn-signin:hover {
+.btn-signin:hover,
+.btn-signin:visited {
     background-color: var(--accent-color-dark);
 }

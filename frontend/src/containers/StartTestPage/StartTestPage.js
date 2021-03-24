@@ -1,19 +1,17 @@
 import React from 'react';
-import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import cogoToast from 'cogo-toast';
+import Form from 'react-bootstrap/Form';
 import { useState, useEffect } from 'react';
 import { Multiselect } from 'multiselect-react-dropdown';
+import validateInput from './ValidateInputData';
 import './StartTestPage.css';
 
 const URL = require('../../config/url-info.json');
-//TODO: refctor validation with clean code principles and send to backend, start jwt logic
+//TODO:  send to backend, start jwt logic
 
 let usersForTest;
-const MIN_MINUTES = 10;
-const MAX_MINUTES = 60;
-const MIN_QUESTIONS = 10;
-const MAX_QUESTIONS = 50;
+
 axios
     .get(`${URL.API_BASE_URL}/users/examinees`)
     .then(res => {
@@ -63,31 +61,7 @@ function StartTestPage(props) {
     };
 
     const handleStartTest = () => {
-        if (
-            testData.minMinutes < MIN_MINUTES ||
-            testData.minMinutes > MAX_MINUTES
-        ) {
-            cogoToast.error(
-                `Minutes must be between ${MIN_MINUTES} and ${MAX_MINUTES}`,
-                {
-                    hideAfter: 3,
-                    position: 'top-center',
-                    heading: 'Wrong minutes input',
-                }
-            );
-        } else if (
-            testData.minQuestions < MIN_QUESTIONS ||
-            testData.minQuestions > MAX_QUESTIONS
-        ) {
-            cogoToast.error(
-                `Questions must be between ${MIN_QUESTIONS} and ${MAX_QUESTIONS}`,
-                {
-                    hideAfter: 3,
-                    position: 'top-center',
-                    heading: 'Wrong questions input',
-                }
-            );
-        } else {
+        if (validateInput(testData)) {
             cogoToast.success('Test started successfully!', {
                 hideAfter: 3,
                 position: 'top-center',
@@ -97,8 +71,11 @@ function StartTestPage(props) {
                 ...prev,
                 usersForTest: usersForTest,
             }));
-            props.history.push('/home');
-            console.log(testData);
+
+            axios.post(`${URL.API_BASE_URL}/test/data`, {
+                testData,
+            });
+            // props.history.push('/home');
         }
     };
 
@@ -150,7 +127,7 @@ function StartTestPage(props) {
                 </Form.Group>
                 <button
                     type="button"
-                    className="btn-signin btn-dark btn-lg btn-block"
+                    className="btn-signin btn-lg btn-block"
                     onClick={() => handleStartTest()}
                 >
                     Start test
