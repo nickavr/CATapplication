@@ -22,7 +22,7 @@ router.post('/users', userController.addUser); //for testing
 router.get('/roles', roleController.getAllRoles); //testing
 
 //TEST
-router.post('/test/data', testController.getTestData);
+router.post('/test/data', testController.setTestData);
 router.get(
     '/join-test',
     JWTmiddleware.authenticateToken,

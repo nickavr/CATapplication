@@ -31,6 +31,7 @@ function StartTestPage(props) {
         minQuestions: 0,
     });
     const [count, setCount] = useState(0);
+    const [testStarted, setTestStarted] = useState(false);
 
     useEffect(() => {
         axios
@@ -67,10 +68,12 @@ function StartTestPage(props) {
                 position: 'top-center',
                 heading: 'Success',
             });
+            setTestStarted(!testStarted);
             setTestData(prev => ({
                 ...prev,
                 usersForTest: usersForTest,
             }));
+            console.log(testData);
 
             axios.post(`${URL.API_BASE_URL}/test/data`, {
                 testData,
@@ -79,60 +82,74 @@ function StartTestPage(props) {
         }
     };
 
+    const handleStopTest = () => {
+        setTestStarted(!testStarted);
+    };
+
     return (
-        <div className="start-test-form">
-            <Form>
-                <Form.Group controlId="start-test-form.AddParticipants">
-                    <Form.Label>Add participants to the test:</Form.Label>
-                    <Multiselect
-                        options={examineeArray}
-                        displayValue="email"
-                        closeIcon="square"
-                        placeholder=""
-                        onSelect={onUserSelect}
-                        onRemove={onUserRemove}
-                        selectedValues={examineeArray}
-                        style={{
-                            chips: { background: 'var(--accent-color)' },
-                        }}
-                    />
-                </Form.Group>
+        <div className="start-test-container">
+            {!testStarted ? (
+                <Form>
+                    <Form.Group controlId="start-test-form.AddParticipants">
+                        <Form.Label>Add participants to the test:</Form.Label>
+                        <Multiselect
+                            options={examineeArray}
+                            displayValue="email"
+                            closeIcon="square"
+                            placeholder=""
+                            onSelect={onUserSelect}
+                            onRemove={onUserRemove}
+                            selectedValues={examineeArray}
+                            style={{
+                                chips: { background: 'var(--accent-color)' },
+                            }}
+                        />
+                    </Form.Group>
 
-                <Form.Group controlId="start-test-form.MinimumTime">
-                    <Form.Label>Min. test time(minutes):</Form.Label>
-                    <Form.Control
-                        type="number"
-                        placeholder="e.g. 20"
-                        onChange={e => {
-                            setTestData(prev => ({
-                                ...prev,
-                                minMinutes: e.target.value,
-                            }));
-                        }}
-                    />
-                </Form.Group>
+                    <Form.Group controlId="start-test-form.MinimumTime">
+                        <Form.Label>Min. test time(minutes):</Form.Label>
+                        <Form.Control
+                            type="number"
+                            placeholder="e.g. 20"
+                            onChange={e => {
+                                setTestData(prev => ({
+                                    ...prev,
+                                    minMinutes: e.target.value,
+                                }));
+                            }}
+                        />
+                    </Form.Group>
 
-                <Form.Group controlId="start-test-form.MinimumQuestions">
-                    <Form.Label>Min. number of questions:</Form.Label>
-                    <Form.Control
-                        type="number"
-                        placeholder="e.g. 10"
-                        onChange={e => {
-                            setTestData(prev => ({
-                                ...prev,
-                                minQuestions: e.target.value,
-                            }));
-                        }}
-                    />
-                </Form.Group>
+                    <Form.Group controlId="start-test-form.MinimumQuestions">
+                        <Form.Label>Min. number of questions:</Form.Label>
+                        <Form.Control
+                            type="number"
+                            placeholder="e.g. 10"
+                            onChange={e => {
+                                setTestData(prev => ({
+                                    ...prev,
+                                    minQuestions: e.target.value,
+                                }));
+                            }}
+                        />
+                    </Form.Group>
+                    <button
+                        type="button"
+                        className="btn-signin btn-lg btn-block"
+                        onClick={() => handleStartTest()}
+                    >
+                        Start test
+                    </button>
+                </Form>
+            ) : (
                 <button
                     type="button"
                     className="btn-signin btn-lg btn-block"
-                    onClick={() => handleStartTest()}
+                    onClick={() => handleStopTest()}
                 >
-                    Start test
+                    Stop test
                 </button>
-            </Form>
+            )}
         </div>
     );
 }

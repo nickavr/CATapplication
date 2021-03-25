@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken');
 
 //sign token
 function generateAccessToken(userEmail) {
-    return jwt.sign(userEmail, process.env.TOKEN_SECRET, {
-        expiresIn: 3600, // 1 hour
+    return jwt.sign({ email: userEmail }, process.env.TOKEN_SECRET, {
+        expiresIn: '3600', // 1 hour
     });
 }
 
