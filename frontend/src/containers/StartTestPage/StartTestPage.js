@@ -8,7 +8,6 @@ import validateInput from './ValidateInputData';
 import './StartTestPage.css';
 
 const URL = require('../../config/url-info.json');
-//TODO:  send to backend, start jwt logic
 
 let usersForTest;
 

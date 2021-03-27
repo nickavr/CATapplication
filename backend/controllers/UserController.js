@@ -1,6 +1,20 @@
 const User = require('../models').User;
 const Role = require('../models').Role;
 const roleController = require('./RoleController');
+const TestArray = require('../storage/Test/TestArray');
+//AUX
+const getTokenFromArray = email => {
+    let token = '';
+    TestArray.testArray.forEach(test => {
+        test.examinees.forEach(user => {
+            if (user.email === email) {
+                token = user.token;
+                return token;
+            }
+        });
+    });
+    return token;
+};
 // GET
 const getAllExaminees = async (req, res) => {
     try {
@@ -60,6 +74,18 @@ const getUserByCredentials = async (req, res) => {
         }
     } catch (err) {
         res.status(500).send('Server error');
+    }
+};
+
+const getUserToken = (req, res) => {
+    try {
+        let email = req.query.email;
+        //FIXME: function getToken returns undefined ???????
+        let token = getTokenFromArray(email);
+        console.log('token');
+        res.status(200).send(token);
+    } catch (err) {
+        res.status(500).send(err.message);
     }
 };
 
@@ -134,6 +160,7 @@ module.exports = {
     getAllUsers,
     getUserByCredentials,
     getUserById,
+    getUserToken,
     addUser,
     editUser,
 };

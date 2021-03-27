@@ -13,6 +13,7 @@ router.post('/login', loginController.loginAuth);
 //USER:
 router.get('/users/examinees', userController.getAllExaminees);
 router.get('/users', userController.getAllUsers);
+router.get('/user/token', userController.getUserToken);
 router.get('/users/credentials', userController.getUserByCredentials);
 router.get('/users/:id', userController.getUserById);
 router.put('/users/:id', userController.editUser);
@@ -23,9 +24,6 @@ router.get('/roles', roleController.getAllRoles); //testing
 
 //TEST
 router.post('/test/data', testController.setTestData);
-router.get(
-    '/join-test',
-    JWTmiddleware.authenticateToken,
-    questionController.getNextQuestion
-);
+router.post('/join-test', JWTmiddleware.authenticateToken);
+
 module.exports = router;
