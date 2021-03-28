@@ -8,11 +8,40 @@ const URL = require('../../config/url-info.json');
 
 function JoinTestPage() {
     let user = UserService.getUserFromStorage();
-    let email = user.email;
     const handleJoinTest = () => {
         axios
-            .get(`${URL.API_BASE_URL}/user/token`, {}, { params: { email } })
-            .then(console.log('AAAAAAAAA'));
+            .post(
+                `${URL.API_BASE_URL}/user/token`,
+                {},
+                { params: { email: user.email } }
+            )
+            .then(res => {
+                if (res.data) {
+                    localStorage.setItem('testToken', JSON.stringify(res.data));
+                    //req with router.post('/join-test', JWTmiddleware.authenticateToken);
+                    axios
+                        .get(`${URL.API_BASE_URL}/join-test`, {
+                            headers: {
+                                Authorization: `Bearer ${JSON.parse(
+                                    localStorage.getItem('testToken')
+                                )}`,
+                            },
+                        })
+                        .then(res => {
+                            console.log(res.data);
+                            //TODO: token is working, start test logic <3
+                        });
+                } else {
+                    cogoToast.warn(
+                        'The test has not started yet or you have not been assigned to any test.',
+                        {
+                            hideAfter: 5,
+                            position: 'top-center',
+                            heading: 'Cannot start test',
+                        }
+                    );
+                }
+            });
     };
 
     return (

@@ -77,19 +77,19 @@ const getUserByCredentials = async (req, res) => {
     }
 };
 
-const getUserToken = (req, res) => {
+// POST addUser -> at login controller, after token is validated.
+
+const setUserToken = async (req, res) => {
     try {
         let email = req.query.email;
-        //FIXME: function getToken returns undefined ???????
         let token = getTokenFromArray(email);
-        console.log('token');
-        res.status(200).send(token);
+
+        res.status(200).json(token);
     } catch (err) {
         res.status(500).send(err.message);
     }
 };
 
-// POST addUser -> at login controller, after token is validated.
 const addUser = async userData => {
     let allRoles = await roleController.getAllRoles();
 
@@ -160,7 +160,7 @@ module.exports = {
     getAllUsers,
     getUserByCredentials,
     getUserById,
-    getUserToken,
+    setUserToken,
     addUser,
     editUser,
 };

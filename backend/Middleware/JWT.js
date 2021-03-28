@@ -23,9 +23,10 @@ function authenticateToken(req, res, next) {
                 message: 'Unauthorized!',
             });
         }
-        res.json({
-            decoded,
-        });
+        // res.status(200).json({
+        //     decoded,
+        // });
+
         next();
     });
 }

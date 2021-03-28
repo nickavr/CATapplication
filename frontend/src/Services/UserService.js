@@ -2,6 +2,10 @@ let emptyLocalStorage = function () {
     localStorage.removeItem('currentUser');
 };
 
+let checkTestToken = function () {
+    return localStorage.getItem('testToken');
+};
+
 let getUserFromStorage = () => {
     return JSON.parse(localStorage.getItem('currentUser'));
 };
@@ -24,5 +28,6 @@ module.exports = {
     emptyLocalStorage,
     getUserFromStorage,
     userIsLogged,
+    checkTestToken,
     getUserStatus,
 };

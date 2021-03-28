@@ -13,7 +13,7 @@ router.post('/login', loginController.loginAuth);
 //USER:
 router.get('/users/examinees', userController.getAllExaminees);
 router.get('/users', userController.getAllUsers);
-router.get('/user/token', userController.getUserToken);
+router.post('/user/token', userController.setUserToken);
 router.get('/users/credentials', userController.getUserByCredentials);
 router.get('/users/:id', userController.getUserById);
 router.put('/users/:id', userController.editUser);
@@ -24,6 +24,14 @@ router.get('/roles', roleController.getAllRoles); //testing
 
 //TEST
 router.post('/test/data', testController.setTestData);
-router.post('/join-test', JWTmiddleware.authenticateToken);
+router.get('/join-test', JWTmiddleware.authenticateToken, (req, res) => {
+    try {
+        console.log('TOKEN AUTHENTIFICATED');
+        //either res.send here or in jwt.verify NOT IN BOTH
+        res.status(200).send({ text: 'MARVELOUS' });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
 
 module.exports = router;
