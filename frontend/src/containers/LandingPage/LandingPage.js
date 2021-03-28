@@ -9,7 +9,6 @@ const URL = require('../../config/url-info.json');
 
 function LandingPage(props, context) {
     const responseGoogleOnSuccess = response => {
-        console.log(response);
         //TODO: uncomment validation for only accepting institutional emails:
         // if (!response.Is.ot.includes('ase')) {
         //     cogoToast.warn('Failed login', {
@@ -32,16 +31,12 @@ function LandingPage(props, context) {
                 }
             )
             .then(res => {
-                // console.log(res.data[0]);
                 cogoToast.success('Login Successful', {
                     hideAfter: 4,
                     position: 'top-center',
                     heading: 'Welcome!',
                 });
-                localStorage.setItem(
-                    'currentUser',
-                    JSON.stringify(res.data[0])
-                );
+                localStorage.setItem('currentUser', JSON.stringify(res.data));
                 props.history.push('/home');
             })
             .catch(err => {

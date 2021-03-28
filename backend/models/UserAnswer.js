@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define(
-        'user_answear',
+        'user_answer',
         {
             userId: {
                 type: DataTypes.INTEGER,
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             isCorrect: {
                 type: DataTypes.BOOLEAN,
             },
-            answear_text: {
+            answer_text: {
                 type: DataTypes.STRING,
             },
         },

@@ -1,0 +1,5 @@
+.join-test-container {
+    display: flexbox;
+    margin: 5% auto;
+    width: 30%;
+}

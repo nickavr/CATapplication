@@ -22,8 +22,8 @@ model.sequelize
 
 // Standard
 model.sequelize.sync();
-// If we have modification for the tables
-// model.sequelize.sync({ alter: true });
+// If you have modification for the tables, this will drop and rebuild the tables, pay attention
+// model.sequelize.sync({ force: true });
 
 const public = path.join(__dirname, '../frontend/public');
 app.use(cors());

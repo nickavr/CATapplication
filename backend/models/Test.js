@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.DATE,
                 allowNull: false,
             },
+            time_stamp: {
+                type: 'TIMESTAMP',
+                allowNull: false,
+            },
             result: {
                 type: DataTypes.FLOAT,
                 required: true,
