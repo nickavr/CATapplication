@@ -1,7 +1,11 @@
 .start-test-container {
-    display: flexbox;
+    display: flex;
+    justify-content: space-evenly;
     margin: 5% auto;
     width: 30%;
+}
+.start-test-form {
+    flex-grow: 4;
 }
 
 /* Overriding element hover from multiple select */

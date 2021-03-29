@@ -8,6 +8,7 @@ const JWT = require('../Middleware/JWT');
 const addExamineesToTest = async (userArray, test) => {
     let token = null;
     for (let i = 0; i < userArray.length; i++) {
+        console.log(userArray[i]);
         token = await JWT.generateAccessToken(userArray[i].email);
         test.addExaminee(new Examinee(userArray[i].email, token));
     }
@@ -19,6 +20,7 @@ const setTestData = (req, res) => {
 
         let testData = new TestData(reqData.minMinutes, reqData.minQuestions);
         const test = new Test(new Array(), testData);
+        console.log(reqData.usersForTest);
 
         addExamineesToTest(reqData.usersForTest, test).then(() => {
             TestArray.testArray.push(test);

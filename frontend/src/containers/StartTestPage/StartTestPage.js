@@ -9,23 +9,14 @@ import './StartTestPage.css';
 
 const URL = require('../../config/url-info.json');
 
-let usersForTest;
-
-axios
-    .get(`${URL.API_BASE_URL}/users/examinees`)
-    .then(res => {
-        usersForTest = res.data;
-    })
-    .catch(err => {
-        console.log(err);
-    });
+let usersForTest = [];
 
 function StartTestPage(props) {
     const [examineeArray, setExamineeArray] = useState([
         { id: '1', email: 'default' },
     ]);
     const [testData, setTestData] = useState({
-        usersForTest: usersForTest,
+        usersForTest: [],
         minMinutes: 0,
         minQuestions: 0,
     });
@@ -43,7 +34,7 @@ function StartTestPage(props) {
             });
     }, [count]);
 
-    const onUserSelect = selectedItem => {
+    const onUserSelect = (selectedList, selectedItem) => {
         setCount(count + 1);
         usersForTest.push(selectedItem);
         setTestData(prev => ({
@@ -51,7 +42,7 @@ function StartTestPage(props) {
             usersForTest: usersForTest,
         }));
     };
-    const onUserRemove = removedItem => {
+    const onUserRemove = (selectedList, removedItem) => {
         setCount(count - 1);
         usersForTest.pop(removedItem);
         setTestData(prev => ({
@@ -77,18 +68,18 @@ function StartTestPage(props) {
             axios.post(`${URL.API_BASE_URL}/test/data`, {
                 testData,
             });
-            // props.history.push('/home');
         }
     };
 
     const handleStopTest = () => {
         setTestStarted(!testStarted);
+        // TODO: continue stop test logic
     };
 
     return (
         <div className="start-test-container">
             {!testStarted ? (
-                <Form>
+                <Form className="start-test-form">
                     <Form.Group controlId="start-test-form.AddParticipants">
                         <Form.Label>Add participants to the test:</Form.Label>
                         <Multiselect
@@ -98,7 +89,6 @@ function StartTestPage(props) {
                             placeholder=""
                             onSelect={onUserSelect}
                             onRemove={onUserRemove}
-                            selectedValues={examineeArray}
                             style={{
                                 chips: { background: 'var(--accent-color)' },
                             }}

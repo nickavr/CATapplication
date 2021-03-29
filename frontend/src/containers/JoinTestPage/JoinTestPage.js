@@ -16,6 +16,8 @@ function JoinTestPage() {
                 { params: { email: user.email } }
             )
             .then(res => {
+                console.log(res);
+
                 if (res.data) {
                     localStorage.setItem('testToken', JSON.stringify(res.data));
                     //req with router.post('/join-test', JWTmiddleware.authenticateToken);
@@ -30,7 +32,13 @@ function JoinTestPage() {
                         .then(res => {
                             console.log(res.data);
                             //TODO: token is working, start test logic <3
-                        });
+                            cogoToast.success('Test has started', {
+                                hideAfter: 5,
+                                position: 'top-center',
+                                heading: 'Good luck!',
+                            });
+                        })
+                        .catch(err => console.log(err.message));
                 } else {
                     cogoToast.warn(
                         'The test has not started yet or you have not been assigned to any test.',

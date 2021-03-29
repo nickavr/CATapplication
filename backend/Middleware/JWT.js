@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 //sign token
 function generateAccessToken(userEmail) {
     return jwt.sign({ email: userEmail }, process.env.TOKEN_SECRET, {
-        expiresIn: '3600', // 1 hour
+        expiresIn: '2h', // 2 hours
     });
 }
 
@@ -20,7 +20,7 @@ function authenticateToken(req, res, next) {
     jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
         if (err) {
             return res.status(401).send({
-                message: 'Unauthorized!',
+                error: err.message,
             });
         }
         // res.status(200).json({
