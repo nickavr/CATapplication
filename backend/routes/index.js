@@ -18,13 +18,14 @@ router.get('/users/credentials', userController.getUserByCredentials);
 router.get('/users/:id', userController.getUserById);
 router.put('/users/:id', userController.editUser);
 router.post('/users', userController.addUser); //for testing
+router.get('/users/:id/test', questionController.getNextQuestion);
 
 //ROLES
 router.get('/roles', roleController.getAllRoles); //testing
 
 //TEST
 router.post('/test/data', testController.setTestData);
-router.get('/join-test', JWTmiddleware.authenticateToken, (req, res) => {
+router.get('/test/join', JWTmiddleware.authenticateToken, (req, res) => {
     try {
         console.log('TOKEN AUTHENTIFICATED');
         //either res.send here or in jwt.verify NOT IN BOTH
@@ -33,5 +34,7 @@ router.get('/join-test', JWTmiddleware.authenticateToken, (req, res) => {
         res.status(500).send(err.message);
     }
 });
+
+//QUESTIONS
 
 module.exports = router;

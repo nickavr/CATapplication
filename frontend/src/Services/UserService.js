@@ -24,10 +24,16 @@ let getUserStatus = () => {
     return statusArray;
 };
 
+let getUserId = () => {
+    let userId = JSON.parse(localStorage.getItem('currentUser')).id;
+    return userId;
+};
+
 module.exports = {
     emptyLocalStorage,
     getUserFromStorage,
     userIsLogged,
     checkTestToken,
     getUserStatus,
+    getUserId,
 };

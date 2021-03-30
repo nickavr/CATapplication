@@ -9,8 +9,6 @@ const getTokenFromArray = email => {
         test.examinees.forEach(user => {
             if (user.email === email) {
                 token = user.token;
-                console.log('AAAAAAAAAAA');
-
                 return token;
             }
         });

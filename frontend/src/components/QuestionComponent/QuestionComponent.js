@@ -1,47 +1,42 @@
 import React from 'react';
 import { useState } from 'react';
+import axios from 'axios';
+import UserService from '../../Services/UserService';
 import './QuestionComponent.css';
 
-export default function QuestionComponent() {
-    const questions = [
-        {
-            questionText: 'What is the capital of France?',
-            answerOptions: [
-                { answerText: 'New York', isCorrect: false },
-                { answerText: 'London', isCorrect: false },
-                { answerText: 'Paris', isCorrect: true },
-                { answerText: 'Dublin', isCorrect: false },
-            ],
-        },
-        {
-            questionText: 'Who is CEO of Tesla?',
-            answerOptions: [
-                { answerText: 'Jeff Bezos', isCorrect: false },
-                { answerText: 'Elon Musk', isCorrect: true },
-                { answerText: 'Bill Gates', isCorrect: false },
-                { answerText: 'Tony Stark', isCorrect: false },
-            ],
-        },
-        {
-            questionText: 'The iPhone was created by which company?',
-            answerOptions: [
-                { answerText: 'Apple', isCorrect: true },
-                { answerText: 'Intel', isCorrect: false },
-                { answerText: 'Amazon', isCorrect: false },
-                { answerText: 'Microsoft', isCorrect: false },
-            ],
-        },
-        {
-            questionText: 'How many Harry Potter books are there?',
-            answerOptions: [
-                { answerText: '1', isCorrect: false },
-                { answerText: '4', isCorrect: false },
-                { answerText: '6', isCorrect: false },
-                { answerText: '7', isCorrect: true },
-            ],
-        },
-    ];
+const URL = require('../../config/url-info.json');
 
+//FIXME: when fetching data, like this, component might render before data gets fetched
+const questions = [];
+for (let i = 0; i < 10; i++) {
+    axios
+        .get(`${URL.API_BASE_URL}/users/${UserService.getUserId}/test`)
+        .then(res => {
+            questions.push({
+                questionText: res.data.question.question_text,
+                answerOptions: [
+                    {
+                        answerText: res.data.choices[0].choice_text,
+                        isCorrect: res.data.choices[0].isCorrect,
+                    },
+                    {
+                        answerText: res.data.choices[1].choice_text,
+                        isCorrect: res.data.choices[1].isCorrect,
+                    },
+                    {
+                        answerText: res.data.choices[2].choice_text,
+                        isCorrect: res.data.choices[2].isCorrect,
+                    },
+                    {
+                        answerText: res.data.choices[3].choice_text,
+                        isCorrect: res.data.choices[3].isCorrect,
+                    },
+                ],
+            });
+        })
+        .catch(err => console.log(err.message));
+}
+export default function QuestionComponent() {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [showScore, setShowScore] = useState(false);
     const [score, setScore] = useState(0);
@@ -59,7 +54,20 @@ export default function QuestionComponent() {
         }
     };
 
-    return (
+    return showScore ? (
+        <div className="score-section">
+            <h2>
+                You scored {score} out of {questions.length}
+            </h2>
+            <button
+                className="btn-signin btn-lg btn-block"
+                //TODO: learn to pass and modify the state from parent component
+                // onClick={() => set}
+            >
+                Ok
+            </button>
+        </div>
+    ) : (
         <div className="question-container">
             <div className="question-section">
                 <div className="question-text">

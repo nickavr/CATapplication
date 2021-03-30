@@ -63,7 +63,6 @@ function StartTestPage(props) {
                 ...prev,
                 usersForTest: usersForTest,
             }));
-            console.log(testData);
 
             axios.post(`${URL.API_BASE_URL}/test/data`, {
                 testData,

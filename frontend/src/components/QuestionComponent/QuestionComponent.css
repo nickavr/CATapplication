@@ -32,7 +32,7 @@
     text-align: center;
 }
 
-/* ANSWERS/RIGHT SECTION */
+/* ANSWERS */
 .answer-section {
     width: 100%;
     display: flex;
@@ -57,4 +57,12 @@
 
 .btn-question-answ:hover {
     background-color: var(--accent-color);
+}
+
+.score-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 5% auto;
+    width: 30%;
 }

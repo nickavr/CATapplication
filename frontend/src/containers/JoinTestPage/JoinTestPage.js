@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import cogoToast from 'cogo-toast';
 import UserService from '../../Services/UserService';
+import Question from '../../components/QuestionComponent/QuestionComponent';
 import './JoinTestPage.css';
 
 const URL = require('../../config/url-info.json');
 
 function JoinTestPage() {
+    const [testStarted, setTestStarted] = useState(false);
     let user = UserService.getUserFromStorage();
     const handleJoinTest = () => {
         axios
@@ -16,13 +18,11 @@ function JoinTestPage() {
                 { params: { email: user.email } }
             )
             .then(res => {
-                console.log(res);
-
                 if (res.data) {
                     localStorage.setItem('testToken', JSON.stringify(res.data));
                     //req with router.post('/join-test', JWTmiddleware.authenticateToken);
                     axios
-                        .get(`${URL.API_BASE_URL}/join-test`, {
+                        .get(`${URL.API_BASE_URL}/test/join`, {
                             headers: {
                                 Authorization: `Bearer ${JSON.parse(
                                     localStorage.getItem('testToken')
@@ -31,7 +31,8 @@ function JoinTestPage() {
                         })
                         .then(res => {
                             console.log(res.data);
-                            //TODO: token is working, start test logic <3
+                            setTestStarted(!testStarted);
+
                             cogoToast.success('Test has started', {
                                 hideAfter: 5,
                                 position: 'top-center',
@@ -52,7 +53,9 @@ function JoinTestPage() {
             });
     };
 
-    return (
+    return testStarted ? (
+        <Question />
+    ) : (
         <div className="join-test-container">
             <h2 className="join-test-greetings-message">
                 Welcome to adaptest, if you have been assigned to a test, please
