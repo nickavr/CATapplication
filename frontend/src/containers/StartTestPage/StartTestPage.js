@@ -52,6 +52,7 @@ function StartTestPage(props) {
     };
 
     const handleStartTest = () => {
+        //TODO: pass a test id or anything so you may find the test and stop it.
         if (validateInput(testData)) {
             cogoToast.success('Test started successfully!', {
                 hideAfter: 3,

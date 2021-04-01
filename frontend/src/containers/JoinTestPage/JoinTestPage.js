@@ -10,6 +10,7 @@ const URL = require('../../config/url-info.json');
 function JoinTestPage() {
     const [testStarted, setTestStarted] = useState(false);
     let user = UserService.getUserFromStorage();
+    let changeTestState = () => setTestStarted(!testStarted);
     const handleJoinTest = () => {
         axios
             .post(
@@ -20,7 +21,6 @@ function JoinTestPage() {
             .then(res => {
                 if (res.data) {
                     localStorage.setItem('testToken', JSON.stringify(res.data));
-                    //req with router.post('/join-test', JWTmiddleware.authenticateToken);
                     axios
                         .get(`${URL.API_BASE_URL}/test/join`, {
                             headers: {
@@ -54,7 +54,7 @@ function JoinTestPage() {
     };
 
     return testStarted ? (
-        <Question />
+        <Question changeTestState={changeTestState} />
     ) : (
         <div className="join-test-container">
             <h2 className="join-test-greetings-message">

@@ -36,7 +36,7 @@ for (let i = 0; i < 10; i++) {
         })
         .catch(err => console.log(err.message));
 }
-export default function QuestionComponent() {
+export default function QuestionComponent(props) {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [showScore, setShowScore] = useState(false);
     const [score, setScore] = useState(0);
@@ -61,8 +61,8 @@ export default function QuestionComponent() {
             </h2>
             <button
                 className="btn-signin btn-lg btn-block"
-                //TODO: learn to pass and modify the state from parent component
-                // onClick={() => set}
+                //TODO: pass and modify the state from parent component
+                onClick={() => props.changeTestState()}
             >
                 Ok
             </button>
