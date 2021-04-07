@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
                 required: true,
                 unique: true,
             },
+            current_test_id: {
+                type: DataTypes.INTEGER,
+                required: true,
+            },
         },
         {
             underscored: true,

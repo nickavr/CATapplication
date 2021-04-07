@@ -1,16 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define(
-        'test',
+        'test_result',
         {
             userId: {
                 type: DataTypes.INTEGER,
             },
             date: {
                 type: DataTypes.DATE,
-                allowNull: false,
-            },
-            time_stamp: {
-                type: 'TIMESTAMP',
                 allowNull: false,
             },
             result: {

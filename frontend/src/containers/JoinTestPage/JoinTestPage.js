@@ -16,7 +16,7 @@ function JoinTestPage() {
             .post(
                 `${URL.API_BASE_URL}/user/token`,
                 {},
-                { params: { email: user.email } }
+                { params: { id: user.id } }
             )
             .then(res => {
                 if (res.data) {

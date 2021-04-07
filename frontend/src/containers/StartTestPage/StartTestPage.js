@@ -8,7 +8,8 @@ import validateInput from './ValidateInputData';
 import './StartTestPage.css';
 
 const URL = require('../../config/url-info.json');
-
+const getUserFromStorage = require('../../Services/UserService')
+    .getUserFromStorage;
 let usersForTest = [];
 
 function StartTestPage(props) {
@@ -19,6 +20,7 @@ function StartTestPage(props) {
         usersForTest: [],
         minMinutes: 0,
         minQuestions: 0,
+        examinerEmail: getUserFromStorage().email,
     });
     const [count, setCount] = useState(0);
     const [testStarted, setTestStarted] = useState(false);
@@ -54,20 +56,24 @@ function StartTestPage(props) {
     const handleStartTest = () => {
         //TODO: pass a test id or anything so you may find the test and stop it.
         if (validateInput(testData)) {
-            cogoToast.success('Test started successfully!', {
-                hideAfter: 3,
-                position: 'top-center',
-                heading: 'Success',
-            });
-            setTestStarted(!testStarted);
             setTestData(prev => ({
                 ...prev,
                 usersForTest: usersForTest,
             }));
 
-            axios.post(`${URL.API_BASE_URL}/test/data`, {
-                testData,
-            });
+            axios
+                .post(`${URL.API_BASE_URL}/test/data`, {
+                    testData,
+                })
+                .then(() => {
+                    cogoToast.success('Test started successfully!', {
+                        hideAfter: 3,
+                        position: 'top-center',
+                        heading: 'Success',
+                    });
+                    setTestStarted(!testStarted);
+                })
+                .catch(err => console.log(err.message));
         }
     };
 

@@ -3,7 +3,7 @@ const router = express();
 const userController = require('../controllers/UserController');
 const loginController = require('../controllers/LoginController');
 const roleController = require('../controllers/RoleController');
-const testController = require('../controllers/TestController');
+const currentTestController = require('../controllers/CurrentTestController');
 const questionController = require('../controllers/QuestionController');
 const JWTmiddleware = require('../Middleware/JWT');
 
@@ -23,8 +23,8 @@ router.get('/users/:id/test', questionController.getNextQuestion);
 //ROLES
 router.get('/roles', roleController.getAllRoles); //testing
 
-//TEST
-router.post('/test/data', testController.setTestData);
+//CURRENT TEST
+router.post('/test/data', currentTestController.setTestData);
 router.get('/test/join', JWTmiddleware.authenticateToken, (req, res) => {
     try {
         console.log('TOKEN AUTHENTIFICATED');

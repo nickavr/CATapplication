@@ -1,20 +1,8 @@
 const User = require('../models').User;
 const Role = require('../models').Role;
+const TestToken = require('../models').TestToken;
 const roleController = require('./RoleController');
-const TestArray = require('../storage/Test/TestArray');
-//AUX
-const getTokenFromArray = email => {
-    let token = '';
-    TestArray.testArray.forEach(test => {
-        test.examinees.forEach(user => {
-            if (user.email === email) {
-                token = user.token;
-                return token;
-            }
-        });
-    });
-    return token;
-};
+
 // GET
 const getAllExaminees = async (req, res) => {
     try {
@@ -81,10 +69,15 @@ const getUserByCredentials = async (req, res) => {
 
 const setUserToken = async (req, res) => {
     try {
-        let email = req.query.email;
-        let token = getTokenFromArray(email);
+        let tokenObject = await TestToken.findOne({
+            where: {
+                userId: req.query.id,
+            },
+        });
 
-        res.status(200).json(token);
+        tokenObject
+            ? res.status(200).json(tokenObject.token)
+            : res.status(400).json('');
     } catch (err) {
         res.status(500).send(err.message);
     }

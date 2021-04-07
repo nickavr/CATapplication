@@ -17,7 +17,11 @@ const User = require(path.join(__dirname, './User.js'))(
     sequelize,
     Sequelize.DataTypes
 );
-const Test = require(path.join(__dirname, './Test.js'))(
+const TestResult = require(path.join(__dirname, './TestResult.js'))(
+    sequelize,
+    Sequelize.DataTypes
+);
+const Resource = require(path.join(__dirname, './Resource.js'))(
     sequelize,
     Sequelize.DataTypes
 );
@@ -29,23 +33,46 @@ const UserRole = require(path.join(__dirname, './UserRole.js'))(
     sequelize,
     Sequelize.DataTypes
 );
-
 const Topic = require(path.join(__dirname, './Topic.js'))(
+    sequelize,
+    Sequelize.DataTypes
+);
+const TestToken = require(path.join(__dirname, './TestToken.js'))(
+    sequelize,
+    Sequelize.DataTypes
+);
+const CurrentTest = require(path.join(__dirname, './CurrentTest.js'))(
     sequelize,
     Sequelize.DataTypes
 );
 
 //users -> tests (1:M)
-Test.belongsTo(User, { onDelete: 'cascade' });
-User.hasMany(Test, { onDelete: 'cascade' });
+User.hasMany(TestResult, { onDelete: 'cascade' });
+TestResult.belongsTo(User, { onDelete: 'cascade' });
 
 //users -> roles (M:M)
 User.belongsToMany(Role, { through: 'user_role' });
 Role.belongsToMany(User, { through: 'user_role' });
 
+//users -> testTokens (1:1)
+User.hasOne(TestToken, { onDelete: 'cascade' });
+TestToken.belongsTo(User, { onDelete: 'cascade' });
+
 //users -> questions (M:M) through user_answear
 User.belongsToMany(Question, { through: 'user_answer' });
 Question.belongsToMany(User, { through: 'user_answer' });
+
+//currentTest -> users (1:M)
+CurrentTest.hasMany(User, { onDelete: 'cascade' });
+User.belongsTo(CurrentTest, { onDelete: 'cascade' });
+
+//testResults -> resources (1:M)
+TestResult.hasMany(Resource, { onDelete: 'cascade' });
+Resource.belongsTo(TestResult, { onDelete: 'cascade' });
+
+//topics -> resources (1:M)
+Topic.hasMany(Resource, { onDelete: 'cascade' });
+Resource.belongsTo(Topic, { onDelete: 'cascade' });
 
 //topics -> questions (1:M)
 Topic.hasMany(Question, { onDelete: 'cascade' });
@@ -62,10 +89,13 @@ UserAnswer.belongsTo(Choice, { onDelete: 'cascade' });
 module.exports = {
     sequelize,
     User,
+    TestToken,
+    CurrentTest,
     UserAnswer,
     Question,
     Choice,
-    Test,
+    TestResult,
+    Resource,
     Role,
     UserRole,
     Topic,
