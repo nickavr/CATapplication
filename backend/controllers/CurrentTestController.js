@@ -8,6 +8,7 @@ const TestData = require('../storage/TestData/TestData');
 const Examinee = require('../storage/Examinee/Examinee');
 const JWT = require('../Middleware/JWT');
 
+//AUX
 const addExamineesToTest = async (userArray, test) => {
     let token = null;
     for (let i = 0; i < userArray.length; i++) {
@@ -33,6 +34,23 @@ const addExamineesToTest = async (userArray, test) => {
     }
 };
 
+const stopTestUpdateDB = async (userArray, test) => {
+    for (user of userArray) {
+        try {
+            await test.destroy();
+            await TestToken.destroy({
+                where: {
+                    userId: user.id,
+                },
+            });
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+    //TODO: before delete current test, add to test result?
+};
+
+//POST
 const setTestData = async (req, res) => {
     try {
         const reqData = req.body.testData;
@@ -52,6 +70,23 @@ const setTestData = async (req, res) => {
     }
 };
 
+//DELETE -> stop test logic
+const examinerStopTest = async (req, res) => {
+    const reqData = req.body.testData;
+    const test = await CurrentTest.findOne({
+        where: {
+            examiner_email: reqData.examinerEmail,
+        },
+    });
+    stopTestUpdateDB(reqData.usersForTest, test)
+        .then(res.status(200).send('Updated BD on stop test condition'))
+        .catch(err => {
+            res.status(400).send('Error in stop test logic');
+            console.log(err.message);
+        });
+};
+
 module.exports = {
     setTestData,
+    examinerStopTest,
 };

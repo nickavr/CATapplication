@@ -80,6 +80,20 @@ function StartTestPage(props) {
     const handleStopTest = () => {
         setTestStarted(!testStarted);
         // TODO: continue stop test logic
+        axios
+            .post(`${URL.API_BASE_URL}/test/stop`, {
+                testData,
+            })
+            .then(
+                cogoToast.success('Test has stopped!', {
+                    hideAfter: 3,
+                    position: 'top-center',
+                    heading: 'Success',
+                })
+            )
+            .catch(err => {
+                console.log(err.message);
+            });
     };
 
     return (

@@ -63,8 +63,8 @@ User.belongsToMany(Question, { through: 'user_answer' });
 Question.belongsToMany(User, { through: 'user_answer' });
 
 //currentTest -> users (1:M)
-CurrentTest.hasMany(User, { onDelete: 'cascade' });
-User.belongsTo(CurrentTest, { onDelete: 'cascade' });
+CurrentTest.hasMany(User);
+// User.belongsTo(CurrentTest, { constraints: false });
 
 //testResults -> resources (1:M)
 TestResult.hasMany(Resource, { onDelete: 'cascade' });

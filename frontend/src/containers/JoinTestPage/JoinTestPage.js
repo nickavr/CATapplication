@@ -50,6 +50,17 @@ function JoinTestPage() {
                         }
                     );
                 }
+            })
+            .catch(err => {
+                cogoToast.warn(
+                    'The test has not started yet or you have not been assigned to any test.',
+                    {
+                        hideAfter: 5,
+                        position: 'top-center',
+                        heading: 'Cannot start test',
+                    }
+                );
+                console.log(err.message);
             });
     };
 
