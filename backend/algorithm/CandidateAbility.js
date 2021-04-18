@@ -1,5 +1,5 @@
-const lowZScore = -2.25;
-const highZScore = 2.25;
+const lowZScore = require('./AlgorithmConstants.json').lowZScore;
+const highZScore = require('./AlgorithmConstants.json').highZScore;
 
 const computeNewAbility = (
     currentAbility,

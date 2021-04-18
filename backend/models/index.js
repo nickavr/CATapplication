@@ -45,6 +45,10 @@ const CurrentTest = require(path.join(__dirname, './CurrentTest.js'))(
     sequelize,
     Sequelize.DataTypes
 );
+const CatData = require(path.join(__dirname, './CatData.js'))(
+    sequelize,
+    Sequelize.DataTypes
+);
 
 //users -> tests (1:M)
 User.hasMany(TestResult, { onDelete: 'cascade' });
@@ -61,6 +65,10 @@ TestToken.belongsTo(User, { onDelete: 'cascade' });
 //users -> questions (M:M) through user_answear
 User.belongsToMany(Question, { through: 'user_answer' });
 Question.belongsToMany(User, { through: 'user_answer' });
+
+//users -> catData (1:1) for algorithm persistance
+User.hasOne(CatData, { onDelete: 'cascade' });
+CatData.belongsTo(User, { onDelete: 'cascade' });
 
 //currentTest -> users (1:M)
 CurrentTest.hasMany(User);
@@ -90,6 +98,7 @@ module.exports = {
     sequelize,
     User,
     TestToken,
+    CatData,
     CurrentTest,
     UserAnswer,
     Question,
