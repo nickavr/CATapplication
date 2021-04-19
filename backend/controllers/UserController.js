@@ -104,7 +104,6 @@ const addUser = async userData => {
             user = await User.create({
                 first_name: userData.given_name,
                 last_name: userData.family_name,
-                estimated_ability: 3,
                 email: userData.email,
             });
 

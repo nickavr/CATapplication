@@ -90,10 +90,6 @@ Question.belongsTo(Topic, { onDelete: 'cascade' });
 Question.hasMany(Choice, { onDelete: 'cascade' });
 Choice.belongsTo(Question, { onDelete: 'cascade' });
 
-//choice -> userAnswer (1:1) for faster validation of the correct answer
-Choice.hasOne(UserAnswer, { onDelete: 'cascade' });
-UserAnswer.belongsTo(Choice, { onDelete: 'cascade' });
-
 module.exports = {
     sequelize,
     User,

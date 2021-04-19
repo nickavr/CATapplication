@@ -1,11 +1,7 @@
-const { Sequelize } = require('sequelize');
 const CurrentTest = require('../models').CurrentTest;
 const User = require('../models').User;
 const TestToken = require('../models').TestToken;
-const Test = require('../storage/Test/Test');
-const TestArray = require('../storage/Test/TestArray');
-const TestData = require('../storage/TestData/TestData');
-const Examinee = require('../storage/Examinee/Examinee');
+const CATdata = require('../models').CatData;
 const JWT = require('../Middleware/JWT');
 
 //AUX
@@ -24,9 +20,20 @@ const addExamineesToTest = async (userArray, test) => {
                     },
                 }
             );
+
             await TestToken.create({
                 userId: userArray[i].id,
                 token: token,
+            });
+
+            await CATdata.create({
+                userId: userArray[i].id,
+                candidate_ability: 0,
+                probability_sum: 0,
+                iif_sum: 0,
+                response_sum: 0,
+                std_error: 2,
+                no_questions: 0,
             });
         } else {
             res.res.status(404).send('Token was not generated');

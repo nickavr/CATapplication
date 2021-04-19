@@ -5,6 +5,7 @@ const loginController = require('../controllers/LoginController');
 const roleController = require('../controllers/RoleController');
 const currentTestController = require('../controllers/CurrentTestController');
 const questionController = require('../controllers/QuestionController');
+const catDataController = require('../controllers/CatDataController');
 const JWTmiddleware = require('../Middleware/JWT');
 
 //AUTH:
@@ -18,7 +19,6 @@ router.get('/users/credentials', userController.getUserByCredentials);
 router.get('/users/:id', userController.getUserById);
 router.put('/users/:id', userController.editUser);
 router.post('/users', userController.addUser); //for testing
-router.get('/users/:id/test', questionController.getNextQuestion);
 
 //ROLES
 router.get('/roles', roleController.getAllRoles); //testing
@@ -37,5 +37,12 @@ router.get('/test/join', JWTmiddleware.authenticateToken, (req, res) => {
 });
 
 //QUESTIONS
+router.get(
+    '/questions/:ability/:stdError/:noQuestions',
+    questionController.getNextQuestion
+);
+
+//CAT-DATA
+router.post('/cat-data', catDataController.setCatData);
 
 module.exports = router;

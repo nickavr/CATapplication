@@ -10,11 +10,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            estimated_ability: {
-                type: DataTypes.FLOAT,
-                required: true,
-                defaultValue: 0,
-            },
             email: {
                 type: DataTypes.STRING,
                 required: true,

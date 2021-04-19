@@ -8,9 +8,6 @@ module.exports = (sequelize, DataTypes) => {
             questionId: {
                 type: DataTypes.INTEGER,
             },
-            choiceId: {
-                type: DataTypes.INTEGER,
-            },
             isCorrect: {
                 type: DataTypes.BOOLEAN,
             },
