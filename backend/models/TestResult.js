@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 required: true,
             },
+            examinerEmail: {
+                type: DataTypes.STRING,
+                required: true,
+            },
         },
         {
             underscored: true,

@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
             min_minutes: {
-                type: DataTypes.STRING,
+                type: DataTypes.INTEGER,
                 required: true,
             },
             min_questions: {
-                type: DataTypes.STRING,
+                type: DataTypes.INTEGER,
                 required: true,
                 defaultValue: false,
             },

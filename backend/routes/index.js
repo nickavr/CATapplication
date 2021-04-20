@@ -7,6 +7,7 @@ const currentTestController = require('../controllers/CurrentTestController');
 const questionController = require('../controllers/QuestionController');
 const catDataController = require('../controllers/CatDataController');
 const JWTmiddleware = require('../Middleware/JWT');
+const { CurrentTest } = require('../models');
 
 //AUTH:
 router.post('/login', loginController.loginAuth);
@@ -26,6 +27,7 @@ router.get('/roles', roleController.getAllRoles); //testing
 //CURRENT TEST
 router.post('/test/data', currentTestController.setTestData);
 router.post('/test/stop', currentTestController.examinerStopTest);
+router.get('/test/users/:id', currentTestController.getTestData);
 router.get('/test/join', JWTmiddleware.authenticateToken, (req, res) => {
     try {
         console.log('TOKEN AUTHENTIFICATED');

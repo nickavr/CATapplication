@@ -45,7 +45,7 @@ const setCatData = async (req, res) => {
                 response_sum: sequelize.literal(
                     `response_sum + ${questionResponse}`
                 ),
-                no_questions: sequelize.literal(`no_questions + 1`),
+                no_questions: noQuestion,
             },
             {
                 where: {

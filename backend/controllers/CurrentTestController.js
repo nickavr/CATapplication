@@ -2,6 +2,7 @@ const CurrentTest = require('../models').CurrentTest;
 const User = require('../models').User;
 const TestToken = require('../models').TestToken;
 const CATdata = require('../models').CatData;
+const TestResult = require('../models').TestResult;
 const JWT = require('../Middleware/JWT');
 
 //AUX
@@ -35,6 +36,15 @@ const addExamineesToTest = async (userArray, test) => {
                 std_error: 2,
                 no_questions: 0,
             });
+
+            await TestResult.create({
+                userId: userArray[i].id,
+                date: new Date(),
+                result: 0,
+                nQuestions: 0,
+                duration: 0,
+                examinerEmail: test.examiner_email,
+            });
         } else {
             res.res.status(404).send('Token was not generated');
         }
@@ -57,21 +67,44 @@ const stopTestUpdateDB = async (userArray, test) => {
     //TODO: before delete current test, add to test result?
 };
 
+//GET
+const getTestData = async (req, res) => {
+    try {
+        const user = await User.findOne({
+            where: {
+                id: req.params.id,
+            },
+        });
+
+        const currentTestData = await CurrentTest.findOne({
+            where: {
+                id: user.current_test_id,
+            },
+        });
+        res.status(200).send(currentTestData);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};
+
 //POST
 const setTestData = async (req, res) => {
     try {
         const reqData = req.body.testData;
-
+        const timeStamp = new Date();
         const currentTest = await CurrentTest.create({
             examiner_email: reqData.examinerEmail,
             min_minutes: reqData.minMinutes,
             min_questions: reqData.minQuestions,
-            start_time_stamp: Date.now(),
+            time_stamp: timeStamp,
         });
+        console.log(currentTest);
 
-        addExamineesToTest(reqData.usersForTest, currentTest).then(() => {
-            res.status(200).send(currentTest);
-        });
+        addExamineesToTest(reqData.usersForTest, currentTest.dataValues).then(
+            () => {
+                res.status(200).send(currentTest);
+            }
+        );
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -96,4 +129,5 @@ const examinerStopTest = async (req, res) => {
 module.exports = {
     setTestData,
     examinerStopTest,
+    getTestData,
 };
