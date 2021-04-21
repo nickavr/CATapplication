@@ -72,7 +72,7 @@ CatData.belongsTo(User, { onDelete: 'cascade' });
 
 //currentTest -> users (1:M)
 CurrentTest.hasMany(User);
-// User.belongsTo(CurrentTest, { constraints: false });
+User.belongsTo(CurrentTest, { onDelete: 'cascade' });
 
 //testResults -> resources (1:M)
 TestResult.hasMany(Resource, { onDelete: 'cascade' });

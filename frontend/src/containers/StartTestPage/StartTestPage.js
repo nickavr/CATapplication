@@ -116,7 +116,7 @@ function StartTestPage(props) {
                     </Form.Group>
 
                     <Form.Group controlId="start-test-form.MinimumTime">
-                        <Form.Label>Min. test time(minutes):</Form.Label>
+                        <Form.Label>Max. test time(minutes):</Form.Label>
                         <Form.Control
                             type="number"
                             placeholder="e.g. 20"
@@ -130,7 +130,7 @@ function StartTestPage(props) {
                     </Form.Group>
 
                     <Form.Group controlId="start-test-form.MinimumQuestions">
-                        <Form.Label>Min. number of questions:</Form.Label>
+                        <Form.Label>Max. number of questions:</Form.Label>
                         <Form.Control
                             type="number"
                             placeholder="e.g. 10"

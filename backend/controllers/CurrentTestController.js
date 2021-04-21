@@ -4,8 +4,33 @@ const TestToken = require('../models').TestToken;
 const CATdata = require('../models').CatData;
 const TestResult = require('../models').TestResult;
 const JWT = require('../Middleware/JWT');
+const zScoreToScore = require('../algorithm/ZScoreToScore').zScoreToScore;
 
 //AUX
+const getDuration = timeStamp => {
+    return Math.floor(Math.abs(new Date(timeStamp) - new Date()) / 1000 / 60);
+};
+
+const getTestDataByUserId = async userId => {
+    try {
+        const user = await User.findOne({
+            where: {
+                id: userId,
+            },
+        });
+
+        const currentTestData = await CurrentTest.findOne({
+            where: {
+                id: user.current_test_id,
+            },
+        });
+
+        return currentTestData;
+    } catch (err) {
+        throw new Error(err.message);
+    }
+};
+
 const addExamineesToTest = async (userArray, test) => {
     let token = null;
     for (let i = 0; i < userArray.length; i++) {
@@ -41,46 +66,50 @@ const addExamineesToTest = async (userArray, test) => {
                 userId: userArray[i].id,
                 date: new Date(),
                 result: 0,
-                nQuestions: 0,
+                noQuestions: 0,
                 duration: 0,
                 examinerEmail: test.examiner_email,
             });
         } else {
-            res.res.status(404).send('Token was not generated');
+            res.status(404).send('Token was not generated');
         }
     }
 };
 
-const stopTestUpdateDB = async (userArray, test) => {
-    for (user of userArray) {
-        try {
-            await test.destroy();
-            await TestToken.destroy({
-                where: {
-                    userId: user.id,
-                },
-            });
-        } catch (err) {
-            console.log(err.message);
-        }
+const deleteGenericTestData = async id => {
+    try {
+        await TestToken.destroy({
+            where: {
+                userId: id,
+            },
+        });
+
+        await CATdata.destroy({
+            where: {
+                userId: id,
+            },
+        });
+    } catch (err) {
+        console.log(err.message);
     }
-    //TODO: before delete current test, add to test result?
+};
+
+const examinerStopTestUpdateDB = async (userArray, test) => {
+    await TestResult.destroy({
+        where: {
+            result: 0,
+        },
+    });
+    await test.destroy();
+    for (user of userArray) {
+        await deleteGenericTestData(user.id);
+    }
 };
 
 //GET
 const getTestData = async (req, res) => {
     try {
-        const user = await User.findOne({
-            where: {
-                id: req.params.id,
-            },
-        });
-
-        const currentTestData = await CurrentTest.findOne({
-            where: {
-                id: user.current_test_id,
-            },
-        });
+        const currentTestData = await getTestDataByUserId(req.params.id);
         res.status(200).send(currentTestData);
     } catch (err) {
         res.status(500).send(err.message);
@@ -118,7 +147,7 @@ const examinerStopTest = async (req, res) => {
             examiner_email: reqData.examinerEmail,
         },
     });
-    stopTestUpdateDB(reqData.usersForTest, test)
+    examinerStopTestUpdateDB(reqData.usersForTest, test)
         .then(res.status(200).send('Updated BD on stop test condition'))
         .catch(err => {
             res.status(400).send('Error in stop test logic');
@@ -126,8 +155,62 @@ const examinerStopTest = async (req, res) => {
         });
 };
 
+const examineeFinishesTest = async (req, res) => {
+    try {
+        const currentTest = await getTestDataByUserId(req.params.id);
+        const normalScore = zScoreToScore(
+            req.body.stdError,
+            req.body.result,
+            req.body.noQuestions
+        );
+        //TODO: before deleting cat_data, add the neccessary to user_answer to update the questions difficulty afterwards
+        await TestResult.update(
+            {
+                result: normalScore, //TODO: send score, not z score
+                noQuestions: req.body.noQuestions,
+                duration: getDuration(currentTest.time_stamp),
+            },
+            {
+                where: {
+                    userId: req.params.id,
+                },
+            }
+        );
+        // await User.update(
+        //     {
+        //         current_test_id: 0,
+        //     },
+        //     {
+        //         where: {
+        //             id: req.params.id,
+        //         },
+        //     }
+        // );
+
+        // let existingUser = await User.findOne({
+        //     where: {
+        //         current_test_id: currentTest.id,
+        //     },
+        // });
+
+        // if (!existingUser) {
+        //     await currentTest.destory();
+        // }
+        //FIXME: delete current test only when all candidates have finished
+        await currentTest.destroy();
+        await deleteGenericTestData(req.params.id);
+
+        console.log(normalScore);
+
+        res.status(200).send({ normalScore });
+    } catch (err) {
+        res.status(404).send(err.message);
+    }
+};
+
 module.exports = {
     setTestData,
     examinerStopTest,
+    examineeFinishesTest,
     getTestData,
 };

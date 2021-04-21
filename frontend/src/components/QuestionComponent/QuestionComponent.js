@@ -13,14 +13,14 @@ let response = 0;
 let stdError = 0;
 
 const QuestionComponent = props => {
-    const [renderData, setRenderData] = useState(true);
+    const [display, setDisplay] = useState(true);
     const [isLoading, setLoading] = useState(true);
     const [currentQuestion, setCurrentQuestion] = useState({});
     const [showScore, setShowScore] = useState(false);
     const [noQuestions, setNoQuestions] = useState(1);
 
     useEffect(() => {
-        if (renderData) {
+        if (display) {
             axios
                 .get(`${URL.API_BASE_URL}/questions/${candidateAbility}/0/0`)
                 .then(res => {
@@ -34,9 +34,10 @@ const QuestionComponent = props => {
                         )
                         .then(res => {
                             testData = res.data;
+                            // console.log(testData);
 
-                            setRenderData(false);
                             setLoading(false);
+                            setDisplay(false);
                         })
                         .catch(err => console.log(err.message));
                 })
@@ -44,9 +45,24 @@ const QuestionComponent = props => {
                     console.log(err.message);
                 });
         }
-    }, []);
+    }, [display]);
 
-    console.log(firstQuestion);
+    const examineeFinishedTest = () => {
+        axios
+            .post(
+                `${URL.API_BASE_URL}/test/finished/${UserService.getUserId()}`,
+                {
+                    result: candidateAbility,
+                    noQuestions: noQuestions,
+                    stdError: stdError,
+                }
+            )
+            .then(res => {
+                candidateAbility = res.data.normalScore;
+                setShowScore(true);
+            })
+            .catch(err => console.log(err.message));
+    };
 
     const handleAnswerOptionClick = isCorrect => {
         if (isCorrect) {
@@ -55,6 +71,7 @@ const QuestionComponent = props => {
             response = 0;
         }
 
+        console.log('');
         console.log(
             'question difficulty: ' + currentQuestion.estimated_difficulty
         );
@@ -74,12 +91,9 @@ const QuestionComponent = props => {
                 candidateAbility = res.data.candidateAbility;
                 stdError = res.data.stdError;
 
-                //first check stop conditions & show score
-                console.log(res.data);
-
                 //TODO: when stop test -> delete data from bd(token, current test, test fk from user) and update test result
                 stopTest(stdError, testData, noQuestions)
-                    ? setShowScore(true)
+                    ? examineeFinishedTest()
                     : //then:
                       axios
                           .get(

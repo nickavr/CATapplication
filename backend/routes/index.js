@@ -27,6 +27,7 @@ router.get('/roles', roleController.getAllRoles); //testing
 //CURRENT TEST
 router.post('/test/data', currentTestController.setTestData);
 router.post('/test/stop', currentTestController.examinerStopTest);
+router.post('/test/finished/:id', currentTestController.examineeFinishesTest);
 router.get('/test/users/:id', currentTestController.getTestData);
 router.get('/test/join', JWTmiddleware.authenticateToken, (req, res) => {
     try {
