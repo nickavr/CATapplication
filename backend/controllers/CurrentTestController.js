@@ -123,8 +123,8 @@ const setTestData = async (req, res) => {
         const timeStamp = new Date();
         const currentTest = await CurrentTest.create({
             examiner_email: reqData.examinerEmail,
-            min_minutes: reqData.minMinutes,
-            min_questions: reqData.minQuestions,
+            max_minutes: reqData.maxMinutes,
+            max_questions: reqData.maxQuestions,
             time_stamp: timeStamp,
         });
         console.log(currentTest);
@@ -163,10 +163,9 @@ const examineeFinishesTest = async (req, res) => {
             req.body.result,
             req.body.noQuestions
         );
-        //TODO: before deleting cat_data, add the neccessary to user_answer to update the questions difficulty afterwards
         await TestResult.update(
             {
-                result: normalScore, //TODO: send score, not z score
+                result: normalScore,
                 noQuestions: req.body.noQuestions,
                 duration: getDuration(currentTest.time_stamp),
             },
@@ -197,7 +196,10 @@ const examineeFinishesTest = async (req, res) => {
         //     await currentTest.destory();
         // }
         //FIXME: delete current test only when all candidates have finished
-        await currentTest.destroy();
+
+        if (currentTest) {
+            await currentTest.destroy();
+        }
         await deleteGenericTestData(req.params.id);
 
         console.log(normalScore);

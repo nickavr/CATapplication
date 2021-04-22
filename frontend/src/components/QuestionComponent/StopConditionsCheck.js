@@ -5,8 +5,8 @@ const stopTest = (stdError, testData, noQuestions) => {
     if (stdError <= admitedStdError) {
         return true;
     } else if (
-        getTestDuration(testData.time_stamp) >= testData.min_minutes ||
-        noQuestions >= testData.min_questions
+        getTestDuration(testData.time_stamp) >= testData.max_minutes ||
+        noQuestions >= testData.max_questions
     ) {
         return true;
     }

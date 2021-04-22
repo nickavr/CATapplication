@@ -22,7 +22,11 @@ const QuestionComponent = props => {
     useEffect(() => {
         if (display) {
             axios
-                .get(`${URL.API_BASE_URL}/questions/${candidateAbility}/0/0`)
+                .get(
+                    `${
+                        URL.API_BASE_URL
+                    }/users/${UserService.getUserId()}/questions/${candidateAbility}/0/0`
+                )
                 .then(res => {
                     firstQuestion = res.data;
                     setCurrentQuestion(firstQuestion);
@@ -60,6 +64,7 @@ const QuestionComponent = props => {
             .then(res => {
                 candidateAbility = res.data.normalScore;
                 setShowScore(true);
+                UserService.deleteTestToken();
             })
             .catch(err => console.log(err.message));
     };
@@ -80,35 +85,48 @@ const QuestionComponent = props => {
         console.log('answered questions: ' + noQuestions);
 
         axios
-            .post(`${URL.API_BASE_URL}/cat-data`, {
+            .post(`${URL.API_BASE_URL}/user-answers`, {
                 userId: UserService.getUserId(),
-                question_difficulty: currentQuestion.estimated_difficulty,
-                question_response: response,
-                candidate_ability: candidateAbility,
-                no_questions: noQuestions,
+                questionId: currentQuestion.id,
+                response: response,
             })
             .then(res => {
-                candidateAbility = res.data.candidateAbility;
-                stdError = res.data.stdError;
-
-                //TODO: when stop test -> delete data from bd(token, current test, test fk from user) and update test result
-                stopTest(stdError, testData, noQuestions)
-                    ? examineeFinishedTest()
-                    : //then:
-                      axios
-                          .get(
-                              `${URL.API_BASE_URL}/questions/${candidateAbility}/${stdError}/${noQuestions}`
-                          )
-                          .then(res => {
-                              setCurrentQuestion(res.data);
-                          })
-                          .catch(err => {
-                              console.log(err.message);
-                          });
+                axios
+                    .post(`${URL.API_BASE_URL}/cat-data`, {
+                        userId: UserService.getUserId(),
+                        question_difficulty:
+                            currentQuestion.estimated_difficulty,
+                        question_response: response,
+                        candidate_ability: candidateAbility,
+                        no_questions: noQuestions,
+                    })
+                    .then(res => {
+                        candidateAbility = res.data.candidateAbility;
+                        stdError = res.data.stdError;
+                        stopTest(stdError, testData, noQuestions)
+                            ? examineeFinishedTest()
+                            : //then:
+                              axios
+                                  .get(
+                                      `${
+                                          URL.API_BASE_URL
+                                      }/users/${UserService.getUserId()}/questions/${candidateAbility}/${stdError}/${noQuestions}`
+                                  )
+                                  .then(res => {
+                                      setCurrentQuestion(res.data);
+                                  })
+                                  .catch(err => {
+                                      console.log(err.message);
+                                  });
+                    })
+                    .catch(err => {
+                        console.log(err.message);
+                    });
             })
             .catch(err => {
                 console.log(err.message);
             });
+
         setNoQuestions(noQuestions + 1);
     };
 
@@ -117,7 +135,6 @@ const QuestionComponent = props => {
             <h2>Your ability level is {candidateAbility}</h2>
             <button
                 className="btn-signin btn-lg btn-block"
-                //TODO: pass and modify the state from parent component
                 onClick={() => props.changeTestState()}
             >
                 Ok
@@ -145,7 +162,7 @@ const QuestionComponent = props => {
             </div>
         </div>
     ) : (
-        <h1>hey</h1>
+        <h1>Loading</h1>
     );
 };
 

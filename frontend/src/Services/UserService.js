@@ -6,6 +6,10 @@ let checkTestToken = function () {
     return localStorage.getItem('testToken');
 };
 
+let deleteTestToken = function () {
+    localStorage.removeItem('testToken');
+};
+
 let getUserFromStorage = () => {
     return JSON.parse(localStorage.getItem('currentUser'));
 };
@@ -36,4 +40,5 @@ module.exports = {
     checkTestToken,
     getUserStatus,
     getUserId,
+    deleteTestToken,
 };

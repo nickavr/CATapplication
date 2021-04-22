@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { Multiselect } from 'multiselect-react-dropdown';
 import validateInput from './ValidateInputData';
 import './StartTestPage.css';
+import JoinTestComponent from '../JoinTestPage/JoinTestPage';
 
 const URL = require('../../config/url-info.json');
 const getUserFromStorage = require('../../Services/UserService')
@@ -18,8 +19,8 @@ function StartTestPage(props) {
     ]);
     const [testData, setTestData] = useState({
         usersForTest: [],
-        minMinutes: 0,
-        minQuestions: 0,
+        maxMinutes: 0,
+        maxQuestions: 0,
         examinerEmail: getUserFromStorage().email,
     });
     const [count, setCount] = useState(0);
@@ -54,7 +55,6 @@ function StartTestPage(props) {
     };
 
     const handleStartTest = () => {
-        //TODO: pass a test id or anything so you may find the test and stop it.
         if (validateInput(testData)) {
             setTestData(prev => ({
                 ...prev,
@@ -79,7 +79,6 @@ function StartTestPage(props) {
 
     const handleStopTest = () => {
         setTestStarted(!testStarted);
-        // TODO: continue stop test logic
         axios
             .post(`${URL.API_BASE_URL}/test/stop`, {
                 testData,
@@ -123,7 +122,7 @@ function StartTestPage(props) {
                             onChange={e => {
                                 setTestData(prev => ({
                                     ...prev,
-                                    minMinutes: e.target.value,
+                                    maxMinutes: e.target.value,
                                 }));
                             }}
                         />
@@ -137,7 +136,7 @@ function StartTestPage(props) {
                             onChange={e => {
                                 setTestData(prev => ({
                                     ...prev,
-                                    minQuestions: e.target.value,
+                                    maxQuestions: e.target.value,
                                 }));
                             }}
                         />

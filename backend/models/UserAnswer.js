@@ -11,9 +11,6 @@ module.exports = (sequelize, DataTypes) => {
             isCorrect: {
                 type: DataTypes.BOOLEAN,
             },
-            answer_text: {
-                type: DataTypes.STRING,
-            },
         },
         {
             underscored: true,

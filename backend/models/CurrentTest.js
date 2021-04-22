@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.DATE,
                 allowNull: true,
             },
-            min_minutes: {
+            max_minutes: {
                 type: DataTypes.INTEGER,
                 required: true,
             },
-            min_questions: {
+            max_questions: {
                 type: DataTypes.INTEGER,
                 required: true,
                 defaultValue: false,

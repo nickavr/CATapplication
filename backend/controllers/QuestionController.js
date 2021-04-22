@@ -1,17 +1,59 @@
 const Question = require('../models').Question;
-let Choice = require('../models').Choice;
+const UserAnswer = require('../models').UserAnswer;
+const Choice = require('../models').Choice;
+const User = require('../models').User;
 const sequelize = require('../models').sequelize;
+const { Op } = require('sequelize');
 const zScoreToScore = require('../algorithm/ZScoreToScore').zScoreToScore;
 
-//TODO: make such as an user cannot gen the same question twice
+const getAnsweredQuestions = async userId => {
+    try {
+        const questionsIdArray = await Question.findAll({
+            attributes: ['id'],
+            include: [
+                {
+                    model: User,
+                    where: { id: userId },
+                    attributes: [],
+                },
+            ],
+        });
+
+        questionsIdArray.forEach((element, index, arr) => {
+            arr[index] = element.id;
+        });
+        return questionsIdArray;
+    } catch (err) {
+        throw new Error(err.message);
+    }
+};
+
+const addUserAnswer = async (req, res) => {
+    try {
+        await UserAnswer.create({
+            userId: req.body.userId,
+            questionId: req.body.questionId,
+            isCorrect: req.body.response,
+        });
+
+        res.status(200).send('Ok');
+    } catch (err) {
+        res.statud(404).send(err.message);
+        throw new Error(err.message);
+    }
+};
+
 const getNextQuestion = async (req, res) => {
     let candiateAbility = zScoreToScore(
         req.params.stdError,
         req.params.ability,
         req.params.noQuestions
     );
+
+    let answeredQuestionsIdArray = await getAnsweredQuestions(req.params.id);
+
     try {
-        let questions = await Question.findOne({
+        let question = await Question.findOne({
             include: [
                 {
                     model: Choice,
@@ -29,9 +71,12 @@ const getNextQuestion = async (req, res) => {
                     'ASC',
                 ],
             ],
+            where: {
+                id: { [Op.notIn]: answeredQuestionsIdArray },
+            },
         });
 
-        res.status(200).send(questions);
+        res.status(200).send(question);
     } catch (err) {
         res.status(404).send(err.message);
     }
@@ -39,4 +84,6 @@ const getNextQuestion = async (req, res) => {
 
 module.exports = {
     getNextQuestion,
+    getAnsweredQuestions,
+    addUserAnswer,
 };

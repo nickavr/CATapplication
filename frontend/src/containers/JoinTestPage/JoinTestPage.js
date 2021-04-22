@@ -9,8 +9,13 @@ const URL = require('../../config/url-info.json');
 
 function JoinTestPage() {
     const [testStarted, setTestStarted] = useState(false);
+    const [examinerStoppedTest, setExaminerStoppedTest] = useState(false);
     let user = UserService.getUserFromStorage();
     let changeTestState = () => setTestStarted(!testStarted);
+    let examinerStop = () => {
+        setExaminerStoppedTest(true);
+        UserService.deleteTestToken();
+    };
     const handleJoinTest = () => {
         axios
             .post(
@@ -66,6 +71,16 @@ function JoinTestPage() {
 
     return testStarted ? (
         <Question changeTestState={changeTestState} />
+    ) : examinerStoppedTest ? (
+        <div className="score-section">
+            <h2>Examiner has stopped the test for everyone.</h2>
+            <button
+                className="btn-signin btn-lg btn-block"
+                onClick={() => changeTestState()}
+            >
+                Ok
+            </button>
+        </div>
     ) : (
         <div className="join-test-container">
             <h2 className="join-test-greetings-message">

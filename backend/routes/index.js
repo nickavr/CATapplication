@@ -20,6 +20,7 @@ router.get('/users/credentials', userController.getUserByCredentials);
 router.get('/users/:id', userController.getUserById);
 router.put('/users/:id', userController.editUser);
 router.post('/users', userController.addUser); //for testing
+router.get('/users/:id/questions', questionController.getAnsweredQuestions);
 
 //ROLES
 router.get('/roles', roleController.getAllRoles); //testing
@@ -41,9 +42,10 @@ router.get('/test/join', JWTmiddleware.authenticateToken, (req, res) => {
 
 //QUESTIONS
 router.get(
-    '/questions/:ability/:stdError/:noQuestions',
+    '/users/:id/questions/:ability/:stdError/:noQuestions',
     questionController.getNextQuestion
 );
+router.post('/user-answers', questionController.addUserAnswer);
 
 //CAT-DATA
 router.post('/cat-data', catDataController.setCatData);
