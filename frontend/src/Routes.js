@@ -6,8 +6,15 @@ import QuestionComponent from './components/QuestionComponent/QuestionComponent'
 import JoinTestPage from './containers/JoinTestPage/JoinTestPage';
 import SideMenu from './components/SideBarMenu/SBM';
 import ProtectedRoute from './ProtectedRoute';
+import { useState } from 'react';
 
 export default function Routes() {
+    const [testState, setTestState] = useState('test state ;)');
+
+    const changeState = () => {
+        setTestState('new testState');
+    };
+
     return (
         <Router>
             <Switch>
@@ -15,11 +22,12 @@ export default function Routes() {
                 <div className="pages">
                     <SideMenu />
                     <Switch>
-                        <ProtectedRoute
-                            path="/home"
-                            exact
-                            component={HomePage}
-                        ></ProtectedRoute>
+                        <ProtectedRoute path="/home">
+                            <HomePage
+                                testState={testState}
+                                changeState={changeState}
+                            />
+                        </ProtectedRoute>
                         <ProtectedRoute
                             path="/start-test"
                             exact

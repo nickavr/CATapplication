@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { Multiselect } from 'multiselect-react-dropdown';
 import validateInput from './ValidateInputData';
 import './StartTestPage.css';
-import JoinTestComponent from '../JoinTestPage/JoinTestPage';
 
 const URL = require('../../config/url-info.json');
 const getUserFromStorage = require('../../Services/UserService')
@@ -25,7 +24,7 @@ function StartTestPage(props) {
     });
     const [count, setCount] = useState(0);
     const [testStarted, setTestStarted] = useState(false);
-
+    console.log(props);
     useEffect(() => {
         axios
             .get(`${URL.API_BASE_URL}/users/examinees`)
