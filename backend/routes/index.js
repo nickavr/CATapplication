@@ -19,6 +19,7 @@ router.post('/user/token', userController.setUserToken);
 router.get('/users/credentials', userController.getUserByCredentials);
 router.get('/users/:id', userController.getUserById);
 router.put('/users/:id', userController.editUser);
+router.get('/users/:id/token', userController.checkUserToken);
 router.post('/users', userController.addUser); //for testing
 router.get('/users/:id/questions', questionController.getAnsweredQuestions);
 
@@ -30,6 +31,10 @@ router.post('/test/data', currentTestController.setTestData);
 router.post('/test/stop', currentTestController.examinerStopTest);
 router.post('/test/finished/:id', currentTestController.examineeFinishesTest);
 router.get('/test/users/:id', currentTestController.getTestData);
+router.get(
+    '/test/examiners/:email',
+    currentTestController.checkCurrentTestData
+);
 router.get('/test/join', JWTmiddleware.authenticateToken, (req, res) => {
     try {
         console.log('TOKEN AUTHENTIFICATED');

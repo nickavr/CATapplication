@@ -5,12 +5,14 @@ import Form from 'react-bootstrap/Form';
 import { useState, useEffect } from 'react';
 import { Multiselect } from 'multiselect-react-dropdown';
 import validateInput from './ValidateInputData';
+import UserService from '../../Services/UserService';
 import './StartTestPage.css';
 
 const URL = require('../../config/url-info.json');
 const getUserFromStorage = require('../../Services/UserService')
     .getUserFromStorage;
 let usersForTest = [];
+let searchInterval = null;
 
 function StartTestPage(props) {
     const [examineeArray, setExamineeArray] = useState([
@@ -24,7 +26,13 @@ function StartTestPage(props) {
     });
     const [count, setCount] = useState(0);
     const [testStarted, setTestStarted] = useState(false);
-    console.log(props);
+    const [examineesFinished, setExamineesFinished] = useState(false);
+
+    let handleExamineesStoppedTest = () => {
+        setTestStarted(false);
+        setExamineesFinished(false);
+    };
+
     useEffect(() => {
         axios
             .get(`${URL.API_BASE_URL}/users/examinees`)
@@ -35,6 +43,29 @@ function StartTestPage(props) {
                 console.log(err);
             });
     }, [count]);
+
+    useEffect(() => {
+        if (testStarted) {
+            searchInterval = setInterval(() => {
+                axios
+                    .get(
+                        `${URL.API_BASE_URL}/test/examiners/${
+                            UserService.getUserFromStorage().email
+                        }`
+                    )
+                    .then(res => {
+                        if (!res.data) {
+                            setTestStarted(false);
+                            setExamineesFinished(true);
+                            clearInterval(searchInterval);
+                        }
+                    });
+            }, 1000);
+        }
+        return () => {
+            clearInterval(searchInterval);
+        };
+    }, [testStarted]);
 
     const onUserSelect = (selectedList, selectedItem) => {
         setCount(count + 1);
@@ -77,6 +108,12 @@ function StartTestPage(props) {
     };
 
     const handleStopTest = () => {
+        setTestData({
+            usersForTest: [],
+            maxMinutes: 0,
+            maxQuestions: 0,
+            examinerEmail: getUserFromStorage().email,
+        });
         setTestStarted(!testStarted);
         axios
             .post(`${URL.API_BASE_URL}/test/stop`, {
@@ -97,57 +134,73 @@ function StartTestPage(props) {
     return (
         <div className="start-test-container">
             {!testStarted ? (
-                <Form className="start-test-form">
-                    <Form.Group controlId="start-test-form.AddParticipants">
-                        <Form.Label>Add participants to the test:</Form.Label>
-                        <Multiselect
-                            options={examineeArray}
-                            displayValue="email"
-                            closeIcon="square"
-                            placeholder=""
-                            onSelect={onUserSelect}
-                            onRemove={onUserRemove}
-                            style={{
-                                chips: { background: 'var(--accent-color)' },
-                            }}
-                        />
-                    </Form.Group>
+                examineesFinished ? (
+                    <div className="score-section">
+                        <h2>All examinees have finished.</h2>
+                        <button
+                            className="btn-signin btn-lg btn-block"
+                            onClick={() => handleExamineesStoppedTest()}
+                        >
+                            Ok
+                        </button>
+                    </div>
+                ) : (
+                    <Form className="start-test-form">
+                        <Form.Group controlId="start-test-form.AddParticipants">
+                            <Form.Label>
+                                Add participants to the test:
+                            </Form.Label>
+                            <Multiselect
+                                options={examineeArray}
+                                displayValue="email"
+                                closeIcon="square"
+                                placeholder=""
+                                onSelect={onUserSelect}
+                                onRemove={onUserRemove}
+                                style={{
+                                    chips: {
+                                        background: 'var(--accent-color)',
+                                    },
+                                }}
+                            />
+                        </Form.Group>
 
-                    <Form.Group controlId="start-test-form.MinimumTime">
-                        <Form.Label>Max. test time(minutes):</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="e.g. 20"
-                            onChange={e => {
-                                setTestData(prev => ({
-                                    ...prev,
-                                    maxMinutes: e.target.value,
-                                }));
-                            }}
-                        />
-                    </Form.Group>
+                        <Form.Group controlId="start-test-form.MinimumTime">
+                            <Form.Label>Max. test time(minutes):</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="e.g. 20"
+                                onChange={e => {
+                                    setTestData(prev => ({
+                                        ...prev,
+                                        maxMinutes: e.target.value,
+                                    }));
+                                }}
+                            />
+                        </Form.Group>
 
-                    <Form.Group controlId="start-test-form.MinimumQuestions">
-                        <Form.Label>Max. number of questions:</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="e.g. 10"
-                            onChange={e => {
-                                setTestData(prev => ({
-                                    ...prev,
-                                    maxQuestions: e.target.value,
-                                }));
-                            }}
-                        />
-                    </Form.Group>
-                    <button
-                        type="button"
-                        className="btn-signin btn-lg btn-block"
-                        onClick={() => handleStartTest()}
-                    >
-                        Start test
-                    </button>
-                </Form>
+                        <Form.Group controlId="start-test-form.MinimumQuestions">
+                            <Form.Label>Max. number of questions:</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="e.g. 10"
+                                onChange={e => {
+                                    setTestData(prev => ({
+                                        ...prev,
+                                        maxQuestions: e.target.value,
+                                    }));
+                                }}
+                            />
+                        </Form.Group>
+                        <button
+                            type="button"
+                            className="btn-signin btn-lg btn-block"
+                            onClick={() => handleStartTest()}
+                        >
+                            Start test
+                        </button>
+                    </Form>
+                )
             ) : (
                 <button
                     type="button"

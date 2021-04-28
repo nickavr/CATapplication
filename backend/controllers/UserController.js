@@ -65,6 +65,19 @@ const getUserByCredentials = async (req, res) => {
     }
 };
 
+const checkUserToken = async (req, res) => {
+    try {
+        const token = await TestToken.findOne({
+            where: {
+                userId: req.params.id,
+            },
+        });
+        token ? res.status(200).send(true) : res.status(200).send(false);
+    } catch (err) {
+        throw new Error(err.message);
+    }
+};
+
 // POST addUser -> at login controller, after token is validated.
 
 const setUserToken = async (req, res) => {
@@ -154,5 +167,6 @@ module.exports = {
     getUserById,
     setUserToken,
     addUser,
+    checkUserToken,
     editUser,
 };

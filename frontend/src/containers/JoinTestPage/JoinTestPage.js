@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import cogoToast from 'cogo-toast';
 import UserService from '../../Services/UserService';
@@ -7,15 +7,48 @@ import './JoinTestPage.css';
 
 const URL = require('../../config/url-info.json');
 
+let searchInterval = null;
+
 function JoinTestPage() {
     const [testStarted, setTestStarted] = useState(false);
+    const [currentTest, setCurrentTest] = useState(false);
     const [examinerStoppedTest, setExaminerStoppedTest] = useState(false);
     let user = UserService.getUserFromStorage();
-    let changeTestState = () => setTestStarted(!testStarted);
-    let examinerStop = () => {
-        setExaminerStoppedTest(true);
-        UserService.deleteTestToken();
+    let changeTestState = () => {
+        setTestStarted(!testStarted);
+        setExaminerStoppedTest(!examinerStoppedTest);
     };
+    let handleExaminerStoppedTest = () => {
+        setTestStarted(false);
+        setExaminerStoppedTest(false);
+    };
+
+    useEffect(() => {
+        searchInterval = setInterval(() => {
+            if (currentTest) {
+                axios
+                    .get(
+                        `${
+                            URL.API_BASE_URL
+                        }/users/${UserService.getUserId()}/token`
+                    )
+                    .then(res => {
+                        if (!res.data) {
+                            console.log('examiner stoppedddd');
+                            UserService.deleteTestToken();
+                            setCurrentTest(false);
+                            setExaminerStoppedTest(true);
+                            clearInterval(searchInterval);
+                        }
+                    });
+            }
+        }, 1000);
+
+        return () => {
+            clearInterval(searchInterval);
+        };
+    }, [currentTest]);
+
     const handleJoinTest = () => {
         axios
             .post(
@@ -37,6 +70,7 @@ function JoinTestPage() {
                         .then(res => {
                             console.log(res.data);
                             setTestStarted(!testStarted);
+                            setCurrentTest(!currentTest);
 
                             cogoToast.success('Test has started', {
                                 hideAfter: 5,
@@ -76,7 +110,7 @@ function JoinTestPage() {
             <h2>Examiner has stopped the test for everyone.</h2>
             <button
                 className="btn-signin btn-lg btn-block"
-                onClick={() => changeTestState()}
+                onClick={() => handleExaminerStoppedTest()}
             >
                 Ok
             </button>

@@ -38,8 +38,6 @@ const QuestionComponent = props => {
                         )
                         .then(res => {
                             testData = res.data;
-                            // console.log(testData);
-
                             setLoading(false);
                             setDisplay(false);
                         })
@@ -101,7 +99,7 @@ const QuestionComponent = props => {
                         no_questions: noQuestions,
                     })
                     .then(res => {
-                        candidateAbility = res.data.candidateAbility;
+                        candidateAbility = res.data.candidateAbility.toFixed(2);
                         stdError = res.data.stdError;
                         stopTest(stdError, testData, noQuestions)
                             ? examineeFinishedTest()

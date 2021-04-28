@@ -28,21 +28,15 @@ export default function Routes() {
                                 changeState={changeState}
                             />
                         </ProtectedRoute>
-                        <ProtectedRoute
-                            path="/start-test"
-                            exact
-                            component={StartTestPage}
-                        ></ProtectedRoute>
-                        <ProtectedRoute
-                            path="/join-test"
-                            exact
-                            component={JoinTestPage}
-                        ></ProtectedRoute>
-                        <Route
-                            path="/question"
-                            exact
-                            component={QuestionComponent}
-                        />
+                        <ProtectedRoute path="/start-test">
+                            <StartTestPage />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/join-test">
+                            <JoinTestPage />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/question">
+                            <QuestionComponent />
+                        </ProtectedRoute>
                     </Switch>
                 </div>
             </Switch>

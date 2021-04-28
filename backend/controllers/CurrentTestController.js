@@ -116,6 +116,19 @@ const getTestData = async (req, res) => {
     }
 };
 
+const checkCurrentTestData = async (req, res) => {
+    try {
+        const currentTest = await CurrentTest.findOne({
+            where: { examiner_email: req.params.email },
+        });
+
+        res.status(200).send(currentTest ? true : false);
+    } catch (err) {
+        res.status(404).send(err.message);
+        throw new Error(err.message);
+    }
+};
+
 //POST
 const setTestData = async (req, res) => {
     try {
@@ -215,4 +228,5 @@ module.exports = {
     examinerStopTest,
     examineeFinishesTest,
     getTestData,
+    checkCurrentTestData,
 };
