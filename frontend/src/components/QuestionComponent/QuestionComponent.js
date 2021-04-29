@@ -60,7 +60,7 @@ const QuestionComponent = props => {
                 }
             )
             .then(res => {
-                candidateAbility = res.data.normalScore;
+                candidateAbility = res.data.normalScore.toFixed(2);
                 setShowScore(true);
                 UserService.deleteTestToken();
             })
@@ -99,7 +99,7 @@ const QuestionComponent = props => {
                         no_questions: noQuestions,
                     })
                     .then(res => {
-                        candidateAbility = res.data.candidateAbility.toFixed(2);
+                        candidateAbility = res.data.candidateAbility;
                         stdError = res.data.stdError;
                         stopTest(stdError, testData, noQuestions)
                             ? examineeFinishedTest()
