@@ -1,15 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define(
-        'user_answer',
+        'test_token',
         {
             userId: {
                 type: DataTypes.INTEGER,
+                required: true,
             },
-            questionId: {
-                type: DataTypes.INTEGER,
-            },
-            isCorrect: {
-                type: DataTypes.BOOLEAN,
+            token: {
+                type: DataTypes.STRING,
+                required: true,
+                defaultValue: false,
             },
         },
         {

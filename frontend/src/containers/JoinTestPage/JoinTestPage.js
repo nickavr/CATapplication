@@ -1,26 +1,66 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import cogoToast from 'cogo-toast';
 import UserService from '../../Services/UserService';
+import Question from '../../components/QuestionComponent/QuestionComponent';
 import './JoinTestPage.css';
 
 const URL = require('../../config/url-info.json');
 
+let searchInterval = null;
+
 function JoinTestPage() {
+    const [testStarted, setTestStarted] = useState(false);
+    const [currentTest, setCurrentTest] = useState(false);
+    const [examinerStoppedTest, setExaminerStoppedTest] = useState(false);
     let user = UserService.getUserFromStorage();
+    let changeTestState = () => {
+        setTestStarted(!testStarted);
+        setExaminerStoppedTest(!examinerStoppedTest);
+    };
+    let handleExaminerStoppedTest = () => {
+        setTestStarted(false);
+        setExaminerStoppedTest(false);
+    };
+
+    useEffect(() => {
+        searchInterval = setInterval(() => {
+            if (currentTest) {
+                axios
+                    .get(
+                        `${
+                            URL.API_BASE_URL
+                        }/users/${UserService.getUserId()}/token`
+                    )
+                    .then(res => {
+                        if (!res.data) {
+                            console.log('examiner stoppedddd');
+                            UserService.deleteTestToken();
+                            setCurrentTest(false);
+                            setExaminerStoppedTest(true);
+                            clearInterval(searchInterval);
+                        }
+                    });
+            }
+        }, 1000);
+
+        return () => {
+            clearInterval(searchInterval);
+        };
+    }, [currentTest]);
+
     const handleJoinTest = () => {
         axios
             .post(
                 `${URL.API_BASE_URL}/user/token`,
                 {},
-                { params: { email: user.email } }
+                { params: { id: user.id } }
             )
             .then(res => {
                 if (res.data) {
                     localStorage.setItem('testToken', JSON.stringify(res.data));
-                    //req with router.post('/join-test', JWTmiddleware.authenticateToken);
                     axios
-                        .get(`${URL.API_BASE_URL}/join-test`, {
+                        .get(`${URL.API_BASE_URL}/test/join`, {
                             headers: {
                                 Authorization: `Bearer ${JSON.parse(
                                     localStorage.getItem('testToken')
@@ -29,8 +69,16 @@ function JoinTestPage() {
                         })
                         .then(res => {
                             console.log(res.data);
-                            //TODO: token is working, start test logic <3
-                        });
+                            setTestStarted(!testStarted);
+                            setCurrentTest(!currentTest);
+
+                            cogoToast.success('Test has started', {
+                                hideAfter: 5,
+                                position: 'top-center',
+                                heading: 'Good luck!',
+                            });
+                        })
+                        .catch(err => console.log(err.message));
                 } else {
                     cogoToast.warn(
                         'The test has not started yet or you have not been assigned to any test.',
@@ -41,10 +89,33 @@ function JoinTestPage() {
                         }
                     );
                 }
+            })
+            .catch(err => {
+                cogoToast.warn(
+                    'The test has not started yet or you have not been assigned to any test.',
+                    {
+                        hideAfter: 5,
+                        position: 'top-center',
+                        heading: 'Cannot start test',
+                    }
+                );
+                console.log(err.message);
             });
     };
 
-    return (
+    return testStarted ? (
+        <Question changeTestState={changeTestState} />
+    ) : examinerStoppedTest ? (
+        <div className="score-section">
+            <h2>Examiner has stopped the test for everyone.</h2>
+            <button
+                className="btn-signin btn-lg btn-block"
+                onClick={() => handleExaminerStoppedTest()}
+            >
+                Ok
+            </button>
+        </div>
+    ) : (
         <div className="join-test-container">
             <h2 className="join-test-greetings-message">
                 Welcome to adaptest, if you have been assigned to a test, please

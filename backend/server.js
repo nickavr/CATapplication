@@ -23,6 +23,7 @@ model.sequelize
 // Standard
 model.sequelize.sync();
 // If you have modification for the tables, this will drop and rebuild the tables, pay attention
+// model.sequelize.sync({ alter: true });
 // model.sequelize.sync({ force: true });
 
 const public = path.join(__dirname, '../frontend/public');

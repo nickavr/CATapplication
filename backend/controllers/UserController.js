@@ -1,20 +1,8 @@
 const User = require('../models').User;
 const Role = require('../models').Role;
+const TestToken = require('../models').TestToken;
 const roleController = require('./RoleController');
-const TestArray = require('../storage/Test/TestArray');
-//AUX
-const getTokenFromArray = email => {
-    let token = '';
-    TestArray.testArray.forEach(test => {
-        test.examinees.forEach(user => {
-            if (user.email === email) {
-                token = user.token;
-                return token;
-            }
-        });
-    });
-    return token;
-};
+
 // GET
 const getAllExaminees = async (req, res) => {
     try {
@@ -77,14 +65,32 @@ const getUserByCredentials = async (req, res) => {
     }
 };
 
+const checkUserToken = async (req, res) => {
+    try {
+        const token = await TestToken.findOne({
+            where: {
+                userId: req.params.id,
+            },
+        });
+        token ? res.status(200).send(true) : res.status(200).send(false);
+    } catch (err) {
+        throw new Error(err.message);
+    }
+};
+
 // POST addUser -> at login controller, after token is validated.
 
 const setUserToken = async (req, res) => {
     try {
-        let email = req.query.email;
-        let token = getTokenFromArray(email);
+        let tokenObject = await TestToken.findOne({
+            where: {
+                userId: req.query.id,
+            },
+        });
 
-        res.status(200).json(token);
+        tokenObject
+            ? res.status(200).json(tokenObject.token)
+            : res.status(400).json('');
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -111,7 +117,6 @@ const addUser = async userData => {
             user = await User.create({
                 first_name: userData.given_name,
                 last_name: userData.family_name,
-                estimated_ability: 3,
                 email: userData.email,
             });
 
@@ -162,5 +167,6 @@ module.exports = {
     getUserById,
     setUserToken,
     addUser,
+    checkUserToken,
     editUser,
 };

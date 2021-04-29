@@ -1,23 +1,23 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define(
-        'user',
+        'current_test',
         {
-            first_name: {
-                type: DataTypes.STRING,
-                allowNull: false,
-            },
-            last_name: {
-                type: DataTypes.STRING,
-                allowNull: false,
-            },
-            email: {
+            examiner_email: {
                 type: DataTypes.STRING,
                 required: true,
-                unique: true,
             },
-            current_test_id: {
+            time_stamp: {
+                type: DataTypes.DATE,
+                allowNull: true,
+            },
+            max_minutes: {
                 type: DataTypes.INTEGER,
                 required: true,
+            },
+            max_questions: {
+                type: DataTypes.INTEGER,
+                required: true,
+                defaultValue: false,
             },
         },
         {

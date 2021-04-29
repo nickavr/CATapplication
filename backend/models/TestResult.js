@@ -1,16 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define(
-        'test',
+        'test_result',
         {
             userId: {
                 type: DataTypes.INTEGER,
             },
             date: {
                 type: DataTypes.DATE,
-                allowNull: false,
-            },
-            time_stamp: {
-                type: 'TIMESTAMP',
                 allowNull: false,
             },
             result: {
@@ -23,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
             },
             duration: {
                 type: DataTypes.INTEGER,
+                required: true,
+            },
+            examinerEmail: {
+                type: DataTypes.STRING,
                 required: true,
             },
         },

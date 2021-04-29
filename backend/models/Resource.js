@@ -1,15 +1,19 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define(
-        'user_answer',
+        'resource',
         {
-            userId: {
+            testId: {
                 type: DataTypes.INTEGER,
+                required: true,
             },
-            questionId: {
+            topicId: {
                 type: DataTypes.INTEGER,
+                required: true,
             },
-            isCorrect: {
-                type: DataTypes.BOOLEAN,
+            link: {
+                type: DataTypes.STRING,
+                required: true,
+                defaultValue: false,
             },
         },
         {
