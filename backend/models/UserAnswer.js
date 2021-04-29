@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
             isCorrect: {
                 type: DataTypes.BOOLEAN,
             },
+            probability: {
+                type: DataTypes.FLOAT,
+            },
         },
         {
             underscored: true,

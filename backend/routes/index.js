@@ -6,6 +6,7 @@ const roleController = require('../controllers/RoleController');
 const currentTestController = require('../controllers/CurrentTestController');
 const questionController = require('../controllers/QuestionController');
 const catDataController = require('../controllers/CatDataController');
+const userAnswerController = require('../controllers/UserAnswerController');
 const JWTmiddleware = require('../Middleware/JWT');
 const { CurrentTest } = require('../models');
 
@@ -55,4 +56,9 @@ router.post('/user-answers', questionController.addUserAnswer);
 //CAT-DATA
 router.post('/cat-data', catDataController.setCatData);
 
+//USER-ANSWER
+router.post(
+    '/users/:id/:ability/answer',
+    userAnswerController.postAnswerProbability
+);
 module.exports = router;

@@ -1,5 +1,6 @@
 {
     "mean": 5.5,
     "lowZScore": -2.25,
-    "highZScore": 2.25
+    "highZScore": 2.25,
+    "stdError": 2
 }

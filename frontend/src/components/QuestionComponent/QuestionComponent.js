@@ -60,6 +60,8 @@ const QuestionComponent = props => {
                 }
             )
             .then(res => {
+                //TODO: add probability to user_answ (modify also the post to send back ability in zScore)
+                //add the request from UserAnswerController
                 candidateAbility = res.data.normalScore.toFixed(2);
                 setShowScore(true);
                 UserService.deleteTestToken();
