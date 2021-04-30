@@ -20,34 +20,32 @@ const QuestionComponent = props => {
     const [noQuestions, setNoQuestions] = useState(1);
 
     useEffect(() => {
-        if (display) {
-            axios
-                .get(
-                    `${
-                        URL.API_BASE_URL
-                    }/users/${UserService.getUserId()}/questions/${candidateAbility}/0/0`
-                )
-                .then(res => {
-                    firstQuestion = res.data;
-                    setCurrentQuestion(firstQuestion);
-                    axios
-                        .get(
-                            `${
-                                URL.API_BASE_URL
-                            }/test/users/${UserService.getUserId()}`
-                        )
-                        .then(res => {
-                            testData = res.data;
-                            setLoading(false);
-                            setDisplay(false);
-                        })
-                        .catch(err => console.log(err.message));
-                })
-                .catch(err => {
-                    console.log(err.message);
-                });
-        }
-    }, [display]);
+        axios
+            .get(
+                `${
+                    URL.API_BASE_URL
+                }/users/${UserService.getUserId()}/questions/${candidateAbility}/0/0`
+            )
+            .then(res => {
+                firstQuestion = res.data;
+                setCurrentQuestion(firstQuestion);
+                axios
+                    .get(
+                        `${
+                            URL.API_BASE_URL
+                        }/test/users/${UserService.getUserId()}`
+                    )
+                    .then(res => {
+                        testData = res.data;
+                        setLoading(false);
+                        setDisplay(false);
+                    })
+                    .catch(err => console.log(err.message));
+            })
+            .catch(err => {
+                console.log(err.message);
+            });
+    }, []);
 
     const examineeFinishedTest = () => {
         axios
@@ -60,8 +58,13 @@ const QuestionComponent = props => {
                 }
             )
             .then(res => {
-                //TODO: add probability to user_answ (modify also the post to send back ability in zScore)
-                //add the request from UserAnswerController
+                axios
+                    .post(
+                        `${
+                            URL.API_BASE_URL
+                        }/users/${UserService.getUserId()}/${candidateAbility}/answer`
+                    )
+                    .catch(err => console.log(err.message));
                 candidateAbility = res.data.normalScore.toFixed(2);
                 setShowScore(true);
                 UserService.deleteTestToken();
@@ -130,12 +133,22 @@ const QuestionComponent = props => {
         setNoQuestions(noQuestions + 1);
     };
 
+    const candidateFinished = () => {
+        props.changeTestState();
+        //reset data
+        candidateAbility = 0;
+        testData = {};
+        firstQuestion = {};
+        response = 0;
+        stdError = 0;
+    };
+
     return showScore ? (
         <div className="score-section">
             <h2>Your ability level is {candidateAbility}</h2>
             <button
                 className="btn-signin btn-lg btn-block"
-                onClick={() => props.changeTestState()}
+                onClick={() => candidateFinished()}
             >
                 Ok
             </button>

@@ -55,6 +55,7 @@ function StartTestPage(props) {
                     )
                     .then(res => {
                         if (!res.data) {
+                            //TODO: update qestions difficulty
                             setTestStarted(false);
                             setExamineesFinished(true);
                             clearInterval(searchInterval);

@@ -61,4 +61,6 @@ router.post(
     '/users/:id/:ability/answer',
     userAnswerController.postAnswerProbability
 );
+router.put('/questions', userAnswerController.updateQuestionsDifficulty);
+
 module.exports = router;
