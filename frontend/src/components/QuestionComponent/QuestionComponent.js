@@ -19,14 +19,6 @@ const QuestionComponent = props => {
     const [noQuestions, setNoQuestions] = useState(1);
 
     //FIXME: strange behaviour: when running multiple tests, ability is max and the same (last) test appears in db
-    let resetComponentData = () => {
-        candidateAbility = 0;
-        testData = {};
-        firstQuestion = {};
-        response = 0;
-        stdError = 0;
-    };
-
     useEffect(() => {
         axios
             .get(
@@ -75,7 +67,6 @@ const QuestionComponent = props => {
                 candidateAbility = res.data.normalScore.toFixed(2);
                 setShowScore(true);
                 UserService.deleteTestToken();
-                resetComponentData();
             })
             .catch(err => console.log(err.message));
     };
