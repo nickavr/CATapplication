@@ -38,7 +38,7 @@ const addUserAnswer = async (req, res) => {
 
         res.status(200).send('Ok');
     } catch (err) {
-        res.statud(404).send(err.message);
+        res.status(404).send(err.message);
         throw new Error(err.message);
     }
 };

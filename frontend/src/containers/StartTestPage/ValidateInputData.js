@@ -4,6 +4,7 @@ const MIN_MINUTES = 10;
 const MAX_MINUTES = 60;
 const MIN_QUESTIONS = 10;
 const MAX_QUESTIONS = 50;
+//TODO: pass as max question no. the actual no. from db
 
 const validateInput = testData => {
     if (testData.usersForTest.length === 0) {
@@ -14,8 +15,8 @@ const validateInput = testData => {
         });
         return false;
     } else if (
-        testData.minMinutes < MIN_MINUTES ||
-        testData.minMinutes > MAX_MINUTES
+        testData.maxMinutes < MIN_MINUTES ||
+        testData.maxMinutes > MAX_MINUTES
     ) {
         cogoToast.error(
             `Minutes must be between ${MIN_MINUTES} and ${MAX_MINUTES}`,
@@ -27,8 +28,8 @@ const validateInput = testData => {
         );
         return false;
     } else if (
-        testData.minQuestions < MIN_QUESTIONS ||
-        testData.minQuestions > MAX_QUESTIONS
+        testData.maxQuestions < MIN_QUESTIONS ||
+        testData.maxQuestions > MAX_QUESTIONS
     ) {
         cogoToast.error(
             `Questions must be between ${MIN_QUESTIONS} and ${MAX_QUESTIONS}`,
