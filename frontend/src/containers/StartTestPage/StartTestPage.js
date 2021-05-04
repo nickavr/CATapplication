@@ -26,11 +26,23 @@ function StartTestPage(props) {
     });
     const [count, setCount] = useState(0);
     const [testStarted, setTestStarted] = useState(false);
+    const [testWasStopped, setTestWasStopped] = useState(false);
     const [examineesFinished, setExamineesFinished] = useState(false);
 
     let handleExamineesStoppedTest = () => {
         setTestStarted(false);
         setExamineesFinished(false);
+    };
+
+    let resetComponentData = () => {
+        setTestData({
+            usersForTest: [],
+            maxMinutes: 0,
+            maxQuestions: 0,
+            examinerEmail: getUserFromStorage().email,
+        });
+        setCount(0);
+        usersForTest = [];
     };
 
     useEffect(() => {
@@ -57,8 +69,12 @@ function StartTestPage(props) {
                         if (!res.data) {
                             //TODO: update qestions difficulty
                             setTestStarted(false);
-                            setExamineesFinished(true);
+                            if (!testWasStopped) {
+                                setExamineesFinished(true);
+                            }
                             clearInterval(searchInterval);
+                            setTestWasStopped(false);
+                            resetComponentData();
                         }
                     });
             }, 1000);
@@ -66,7 +82,7 @@ function StartTestPage(props) {
         return () => {
             clearInterval(searchInterval);
         };
-    }, [testStarted]);
+    }, [testStarted, testWasStopped]);
 
     const onUserSelect = (selectedList, selectedItem) => {
         setCount(count + 1);
@@ -109,13 +125,8 @@ function StartTestPage(props) {
     };
 
     const handleStopTest = () => {
-        setTestData({
-            usersForTest: [],
-            maxMinutes: 0,
-            maxQuestions: 0,
-            examinerEmail: getUserFromStorage().email,
-        });
-        setTestStarted(!testStarted);
+        setTestWasStopped(true);
+        resetComponentData();
         axios
             .post(`${URL.API_BASE_URL}/test/stop`, {
                 testData,
