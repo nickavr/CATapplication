@@ -39,7 +39,7 @@ const addExamineesToTest = async (userArray, test) => {
 
         if (token) {
             await User.update(
-                { current_test_id: test.id },
+                { current_test_id: test.id, finished_test: false },
                 {
                     where: {
                         id: userArray[i].id,
@@ -185,30 +185,33 @@ const examineeFinishesTest = async (req, res) => {
             {
                 where: {
                     userId: req.params.id,
+                    result: 0,
                 },
             }
         );
-        // await User.update(
-        //     {
-        //         current_test_id: 0,
-        //     },
-        //     {
-        //         where: {
-        //             id: req.params.id,
-        //         },
-        //     }
-        // );
+        await User.update(
+            {
+                finished_test: true,
+            },
+            {
+                where: {
+                    id: req.params.id,
+                },
+            }
+        );
 
-        // let existingUser = await User.findOne({
-        //     where: {
-        //         current_test_id: currentTest.id,
-        //     },
-        // });
+        let userIsTakingTest = await User.findOne({
+            where: {
+                current_test_id: currentTest.id,
+                finished_test: false,
+            },
+        });
 
-        // if (!existingUser) {
+        //FIXME: this generates error ?!
+        //FIXME: delete current test only when all candidates have finished
+        // if (userIsTakingTest === null) {
         //     await currentTest.destory();
         // }
-        //FIXME: delete current test only when all candidates have finished
 
         if (currentTest) {
             await currentTest.destroy();
@@ -223,10 +226,25 @@ const examineeFinishesTest = async (req, res) => {
     }
 };
 
+const testRoute = async (req, res) => {
+    try {
+        let userIsTakingTest = await User.findOne({
+            where: {
+                current_test_id: 1243,
+                finished_test: false,
+            },
+        });
+        res.status(200).send(userIsTakingTest);
+    } catch (err) {
+        res.status(404).send(err.message);
+    }
+};
+
 module.exports = {
     setTestData,
     examinerStopTest,
     examineeFinishesTest,
     getTestData,
     checkCurrentTestData,
+    testRoute,
 };

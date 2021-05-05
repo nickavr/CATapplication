@@ -28,6 +28,7 @@ router.get('/users/:id/questions', questionController.getAnsweredQuestions);
 router.get('/roles', roleController.getAllRoles); //testing
 
 //CURRENT TEST
+router.get('/test/dummy', currentTestController.testRoute); //testing
 router.post('/test/data', currentTestController.setTestData);
 router.post('/test/stop', currentTestController.examinerStopTest);
 router.post('/test/finished/:id', currentTestController.examineeFinishesTest);
