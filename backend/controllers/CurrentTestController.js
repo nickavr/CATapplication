@@ -202,39 +202,47 @@ const examineeFinishesTest = async (req, res) => {
 
         let userIsTakingTest = await User.findOne({
             where: {
-                current_test_id: currentTest.id,
+                current_test_id: 13,
                 finished_test: false,
             },
         });
+        // console.log(userIsTakingTest);
 
         //FIXME: this generates error ?!
         //FIXME: delete current test only when all candidates have finished
-        // if (userIsTakingTest === null) {
-        //     await currentTest.destory();
-        // }
-
-        if (currentTest) {
+        if (userIsTakingTest === null) {
             await currentTest.destroy();
         }
-        await deleteGenericTestData(req.params.id);
 
-        console.log(normalScore);
+        await deleteGenericTestData(req.params.id);
+        // if (currentTest) {
+        //     await currentTest.destroy();
+        // }
+
+        // console.log(normalScore);
 
         res.status(200).send({ normalScore });
     } catch (err) {
-        res.status(404).send(err.message);
+        res.status(500).send(err.message);
     }
 };
 
+//TODO: delete route here and in index
 const testRoute = async (req, res) => {
     try {
+        const currentTest = await getTestDataByUserId(5);
         let userIsTakingTest = await User.findOne({
             where: {
-                current_test_id: 1243,
+                current_test_id: 133,
                 finished_test: false,
             },
         });
-        res.status(200).send(userIsTakingTest);
+
+        if (userIsTakingTest === null) {
+            await currentTest.destroy();
+            // res.status(200).send('current test destroyed');
+        }
+        res.status(200).send(currentTest);
     } catch (err) {
         res.status(404).send(err.message);
     }
