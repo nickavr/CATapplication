@@ -4,6 +4,7 @@ import HomePage from './containers/HomePage/HomePage';
 import StartTestPage from './containers/StartTestPage/StartTestPage';
 import QuestionComponent from './components/QuestionComponent/QuestionComponent';
 import JoinTestPage from './containers/JoinTestPage/JoinTestPage';
+import ExaminerStatsPage from './containers/ExaminerStatisticsPage/ExaminerStatisticsPage';
 import SideMenu from './components/SideBarMenu/SBM';
 import ProtectedRoute from './ProtectedRoute';
 import { useState } from 'react';
@@ -36,6 +37,9 @@ export default function Routes() {
                         </ProtectedRoute>
                         <ProtectedRoute path="/question">
                             <QuestionComponent />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/statistics">
+                            <ExaminerStatsPage />
                         </ProtectedRoute>
                     </Switch>
                 </div>

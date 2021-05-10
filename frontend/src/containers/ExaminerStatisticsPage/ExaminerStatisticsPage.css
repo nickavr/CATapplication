@@ -1,0 +1,16 @@
+.stats-container {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--base-light);
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    font-size: xx-large;
+}
+
+.scatter-plot {
+    display: flex;
+    margin: 5% auto;
+    width: 50%;
+    height: 50%;
+}
