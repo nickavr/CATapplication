@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
             link: {
                 type: DataTypes.STRING,
                 required: true,
-                defaultValue: false,
             },
         },
         {

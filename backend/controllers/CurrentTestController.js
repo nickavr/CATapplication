@@ -39,7 +39,7 @@ const addExamineesToTest = async (userArray, test) => {
 
         if (token) {
             await User.update(
-                { current_test_id: test.id },
+                { current_test_id: test.id, finished_test: false },
                 {
                     where: {
                         id: userArray[i].id,
@@ -185,39 +185,56 @@ const examineeFinishesTest = async (req, res) => {
             {
                 where: {
                     userId: req.params.id,
+                    result: 0,
                 },
             }
         );
-        // await User.update(
-        //     {
-        //         current_test_id: 0,
-        //     },
-        //     {
-        //         where: {
-        //             id: req.params.id,
-        //         },
-        //     }
-        // );
+        await User.update(
+            {
+                finished_test: true,
+            },
+            {
+                where: {
+                    id: req.params.id,
+                },
+            }
+        );
 
-        // let existingUser = await User.findOne({
-        //     where: {
-        //         current_test_id: currentTest.id,
-        //     },
-        // });
+        let userIsTakingTest = await User.findOne({
+            where: {
+                current_test_id: 13,
+                finished_test: false,
+            },
+        });
 
-        // if (!existingUser) {
-        //     await currentTest.destory();
-        // }
-        //FIXME: delete current test only when all candidates have finished
-
-        if (currentTest) {
+        if (userIsTakingTest === null) {
             await currentTest.destroy();
         }
+
         await deleteGenericTestData(req.params.id);
 
-        console.log(normalScore);
-
         res.status(200).send({ normalScore });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};
+
+//TODO: delete route here and in index
+const testRoute = async (req, res) => {
+    try {
+        const currentTest = await getTestDataByUserId(5);
+        let userIsTakingTest = await User.findOne({
+            where: {
+                current_test_id: 133,
+                finished_test: false,
+            },
+        });
+
+        if (userIsTakingTest === null) {
+            await currentTest.destroy();
+            // res.status(200).send('current test destroyed');
+        }
+        res.status(200).send(currentTest);
     } catch (err) {
         res.status(404).send(err.message);
     }
@@ -229,4 +246,5 @@ module.exports = {
     examineeFinishesTest,
     getTestData,
     checkCurrentTestData,
+    testRoute,
 };
