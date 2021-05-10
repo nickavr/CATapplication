@@ -206,20 +206,12 @@ const examineeFinishesTest = async (req, res) => {
                 finished_test: false,
             },
         });
-        // console.log(userIsTakingTest);
 
-        //FIXME: this generates error ?!
-        //FIXME: delete current test only when all candidates have finished
         if (userIsTakingTest === null) {
             await currentTest.destroy();
         }
 
         await deleteGenericTestData(req.params.id);
-        // if (currentTest) {
-        //     await currentTest.destroy();
-        // }
-
-        // console.log(normalScore);
 
         res.status(200).send({ normalScore });
     } catch (err) {
