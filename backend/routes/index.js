@@ -6,6 +6,7 @@ const roleController = require('../controllers/RoleController');
 const currentTestController = require('../controllers/CurrentTestController');
 const questionController = require('../controllers/QuestionController');
 const catDataController = require('../controllers/CatDataController');
+const testResultController = require('../controllers/TestResultsController');
 const userAnswerController = require('../controllers/UserAnswerController');
 const JWTmiddleware = require('../Middleware/JWT');
 const { CurrentTest } = require('../models');
@@ -63,5 +64,12 @@ router.post(
     userAnswerController.postAnswerProbability
 );
 router.put('/questions', userAnswerController.updateQuestionsDifficulty);
+
+//TEST-RESULTS
+router.get(
+    '/results/dates/:email',
+    testResultController.getAllDatesForExaminer
+);
+router.post('/results', testResultController.getResultsData);
 
 module.exports = router;
