@@ -1,42 +1,21 @@
 import React from 'react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { VictoryChart, VictoryScatter, VictoryTheme } from 'victory';
+import { VictoryChart, VictoryScatter } from 'victory';
 import { Multiselect } from 'multiselect-react-dropdown';
 import UserService from '../../Services/UserService';
+import SelectTestComponent from '../../components/SelectTestComponent/SelectTestComponent';
 import './ExaminerStatisticsPage.css';
 
 const URL = require('../../config/url-info.json');
 
 function ExaminerStatisticsPage() {
-    let [testsDatesArray, setTestsDatesArray] = useState([
-        {
-            id: 1,
-            date: '10/10/2020',
-        },
-    ]);
-
     let [cardsData, setCardsData] = useState({
         avgGrade: 'n/a',
         avgDuration: 'n/a',
     });
 
     let [candidatesResultsArray, setCandidatesResultsArray] = useState([]);
-
-    useEffect(() => {
-        axios
-            .get(
-                `${URL.API_BASE_URL}/results/dates/${
-                    UserService.getUserFromStorage().email
-                }`
-            )
-            .then(res => {
-                setTestsDatesArray(res.data);
-            })
-            .catch(err => {
-                throw new Error(err.mesage);
-            });
-    }, []);
 
     let computeAvgGrade = results => {
         let sum = 0;
@@ -73,10 +52,6 @@ function ExaminerStatisticsPage() {
                     });
                 });
                 setCandidatesResultsArray(gradesArray);
-
-                let avgGrade = computeAvgGrade(res.data);
-                let avgDuration = computeAvgDuration(res.data);
-
                 setCardsData({
                     avgGrade: computeAvgGrade(res.data),
                     avgDuration: computeAvgDuration(res.data),
@@ -93,27 +68,7 @@ function ExaminerStatisticsPage() {
         <div className="stats-container">
             <div className="stats-container-contents">
                 <div className="stats-data">
-                    <h3>Choose a test to be displayed:</h3>
-                    <Multiselect
-                        singleSelect={true}
-                        options={testsDatesArray}
-                        displayValue="date"
-                        closeIcon="close"
-                        placeholder=""
-                        onSelect={onDateSelect}
-                        // onRemove={onUserRemove}
-                        style={{
-                            chips: {
-                                background: 'var(--accent-color)',
-                            },
-                            searchBox: {
-                                background: '#fff',
-                                border: 'none',
-                                boxShadow:
-                                    '0 2px 3px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1)',
-                            },
-                        }}
-                    />
+                    <SelectTestComponent onSelect={onDateSelect} />
                     <div className="stats-cards">
                         <div className="card">
                             <h3>Average grade</h3>

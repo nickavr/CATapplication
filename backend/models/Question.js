@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
                 required: true,
                 defaultValue: 0,
             },
+            suggested_difficulty: {
+                type: DataTypes.FLOAT,
+                required: true,
+                defaultValue: 0,
+            },
             image: {
                 type: DataTypes.STRING,
             },

@@ -5,14 +5,14 @@ import * as Md from 'react-icons/md';
 
 export const SidebarData = [
     // admin & examinee
-    {
-        title: 'Home',
-        path: '/home',
-        icon: <Ai.AiFillHome />,
-        colName: 'nav-text',
-        status: 'general',
-        display: true,
-    },
+    // {
+    //     title: 'Home',
+    //     path: '/home',
+    //     icon: <Ai.AiFillHome />,
+    //     colName: 'nav-text',
+    //     status: 'general',
+    //     display: true,
+    // },
     // examinee
     {
         title: 'Join test',
@@ -30,7 +30,15 @@ export const SidebarData = [
         status: 'examinee',
         display: false,
     },
-    // Admin
+    // Examiner
+    {
+        title: 'Test results',
+        path: '/test-results',
+        icon: <Io.IoMdBookmarks />,
+        colName: 'nav-text',
+        status: 'examiner',
+        display: false,
+    },
     {
         title: 'Start test',
         path: '/start-test',

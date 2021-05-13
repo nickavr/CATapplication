@@ -1,10 +1,11 @@
 const Question = require('../models').Question;
 const UserAnswer = require('../models').UserAnswer;
+const QuestionAnalytics = require('../models').QuestionAnalytics;
 const User = require('../models').User;
-const computeProbability = require('../algorithm/ComputeProbability')
-    .computeProbability;
-const computeNewDifficulty = require('../algorithm/QuestionDifficulty')
-    .computeNewDifficulty;
+const computeProbability =
+    require('../algorithm/ComputeProbability').computeProbability;
+const computeNewDifficulty =
+    require('../algorithm/QuestionDifficulty').computeNewDifficulty;
 const scoreToZScore = require('../algorithm/scoreToZScore').scoreToZScore;
 const computeIIF = require('../algorithm/IIF').computeIIF;
 const constants = require('../algorithm/AlgorithmConstants.json');
@@ -37,11 +38,13 @@ const postAnswerProbability = async (req, res) => {
                 req.params.ability
             );
 
-            await UserAnswer.update(
+            await QuestionAnalytics.update(
                 { probability: questionProbability },
                 {
                     where: {
                         questionId: userAnswers[i].questionId,
+                        probability: null,
+                        candidateId: req.params.id,
                     },
                 }
             );
@@ -54,7 +57,6 @@ const postAnswerProbability = async (req, res) => {
     }
 };
 
-//TODO: complete update questions diff function
 const updateQuestionsDifficulty = async (req, res) => {
     let testNewDifficultyArray = [];
     let questionDataArray = null;
@@ -80,12 +82,13 @@ const updateQuestionsDifficulty = async (req, res) => {
         });
 
         for (let i = 0; i < answeredQuestions.length; i++) {
-            questionDataArray = await UserAnswer.findAll({
+            questionDataArray = await QuestionAnalytics.findAll({
                 attributes: ['isCorrect', 'probability'],
                 where: {
                     questionId: answeredQuestions[i].id,
                 },
             });
+            res.status(200).send(questionDataArray);
             questionDataArray.forEach(element => {
                 correctAnswersSum += element.isCorrect;
                 probabilitySum += element.probability;
@@ -98,15 +101,14 @@ const updateQuestionsDifficulty = async (req, res) => {
                 IIFSum
             );
             testNewDifficultyArray.push(newDifficulty);
-            //TODO: uncomment if this endpoint will be used
-            // await Question.update(
-            //     { estimated_difficulty: newDifficulty },
-            //     {
-            //         where: {
-            //             id: answeredQuestions[i].id,
-            //         },
-            //     }
-            // );
+            await Question.update(
+                { suggested_difficulty: newDifficulty },
+                {
+                    where: {
+                        id: answeredQuestions[i].id,
+                    },
+                }
+            );
             correctAnswersSum = 0;
             probabilitySum = 0;
             IIFSum = 0;

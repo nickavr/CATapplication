@@ -49,24 +49,32 @@ const QuestionComponent = props => {
     const examineeFinishedTest = () => {
         axios
             .post(
-                `${URL.API_BASE_URL}/test/finished/${UserService.getUserId()}`,
-                {
-                    result: candidateAbility,
-                    noQuestions: noQuestions,
-                    stdError: stdError,
-                }
+                `${
+                    URL.API_BASE_URL
+                }/users/${UserService.getUserId()}/${candidateAbility}/answer`
             )
             .then(res => {
                 axios
                     .post(
                         `${
                             URL.API_BASE_URL
-                        }/users/${UserService.getUserId()}/${candidateAbility}/answer`
+                        }/test/finished/${UserService.getUserId()}`,
+                        {
+                            result: candidateAbility,
+                            noQuestions: noQuestions,
+                            stdError: stdError,
+                        }
                     )
+                    .then(res => {
+                        candidateAbility = res.data.normalScore.toFixed(2);
+                        setShowScore(true);
+                        UserService.deleteTestToken();
+                    })
                     .catch(err => console.log(err.message));
-                candidateAbility = res.data.normalScore.toFixed(2);
-                setShowScore(true);
-                UserService.deleteTestToken();
+
+                axios
+                    .put(`${URL.API_BASE_URL}/questions`)
+                    .catch(err => console.log(err.message));
             })
             .catch(err => console.log(err.message));
     };

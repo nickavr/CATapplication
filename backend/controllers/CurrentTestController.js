@@ -1,5 +1,6 @@
 const CurrentTest = require('../models').CurrentTest;
 const User = require('../models').User;
+const UserAnswer = require('../models').UserAnswer;
 const TestToken = require('../models').TestToken;
 const CATdata = require('../models').CatData;
 const TestResult = require('../models').TestResult;
@@ -85,6 +86,11 @@ const deleteGenericTestData = async id => {
         });
 
         await CATdata.destroy({
+            where: {
+                userId: id,
+            },
+        });
+        await UserAnswer.destroy({
             where: {
                 userId: id,
             },

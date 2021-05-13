@@ -49,6 +49,10 @@ const CatData = require(path.join(__dirname, './CatData.js'))(
     sequelize,
     Sequelize.DataTypes
 );
+const QuestionAnalytics = require(path.join(__dirname, './QuestionAnalytics'))(
+    sequelize,
+    Sequelize.DataTypes
+);
 
 //users -> tests (1:M)
 User.hasMany(TestResult, { onDelete: 'cascade' });
@@ -90,6 +94,10 @@ Question.belongsTo(Topic, { onDelete: 'cascade' });
 Question.hasMany(Choice, { onDelete: 'cascade' });
 Choice.belongsTo(Question, { onDelete: 'cascade' });
 
+//questions -> question_analytics (1:M)
+Question.hasMany(QuestionAnalytics, { onDelete: 'cascade' });
+QuestionAnalytics.belongsTo(Question, { onDelete: 'cascade' });
+
 module.exports = {
     sequelize,
     User,
@@ -98,6 +106,7 @@ module.exports = {
     CurrentTest,
     UserAnswer,
     Question,
+    QuestionAnalytics,
     Choice,
     TestResult,
     Resource,

@@ -1,5 +1,6 @@
 const Question = require('../models').Question;
 const UserAnswer = require('../models').UserAnswer;
+const QuestionAnalytics = require('../models').QuestionAnalytics;
 const Choice = require('../models').Choice;
 const User = require('../models').User;
 const sequelize = require('../models').sequelize;
@@ -33,7 +34,13 @@ const addUserAnswer = async (req, res) => {
         await UserAnswer.create({
             userId: req.body.userId,
             questionId: req.body.questionId,
+            // isCorrect: req.body.response,
+        });
+
+        await QuestionAnalytics.create({
+            questionId: req.body.questionId,
             isCorrect: req.body.response,
+            candidateId: req.body.userId,
         });
 
         res.status(200).send('Ok');
