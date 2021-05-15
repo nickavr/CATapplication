@@ -39,14 +39,12 @@ function JoinTestPage() {
                             console.log('examiner stoppedddd');
                             UserService.deleteTestToken();
                             //FIXME: state is not updated ????
-                            setCurrentTest(currState => (currState = false));
-                            setExaminerStoppedTest(
-                                currState => (currState = true)
-                            );
+                            setCurrentTest(false);
+                            setExaminerStoppedTest(true);
+                            console.log(`currentTest ${currentTest}`);
                             console.log(
                                 `examinerStoppedTest ${examinerStoppedTest}`
                             );
-                            console.log(`currentTest ${currentTest}`);
                             clearInterval(searchInterval);
                         }
                     });
@@ -56,7 +54,7 @@ function JoinTestPage() {
         return () => {
             clearInterval(searchInterval);
         };
-    }, [currentTest]);
+    }, [currentTest, examinerStoppedTest]);
 
     const handleJoinTest = () => {
         axios

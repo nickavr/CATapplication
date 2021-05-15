@@ -8,7 +8,7 @@ const computeNewDifficulty = (
     IIFsum
 ) => {
     let newDifficulty =
-        currentDifficulty + (-correctAnswerSum + probabilitySum) / IIFsum;
+        currentDifficulty + (probabilitySum - correctAnswerSum) / IIFsum;
 
     return newDifficulty < lowZScore
         ? lowZScore

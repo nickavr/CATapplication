@@ -9,8 +9,8 @@ import UserService from '../../Services/UserService';
 import './StartTestPage.css';
 
 const URL = require('../../config/url-info.json');
-const getUserFromStorage = require('../../Services/UserService')
-    .getUserFromStorage;
+const getUserFromStorage =
+    require('../../Services/UserService').getUserFromStorage;
 let usersForTest = [];
 let searchInterval = null;
 
@@ -67,7 +67,6 @@ function StartTestPage(props) {
                     )
                     .then(res => {
                         if (!res.data) {
-                            //TODO: update qestions difficulty
                             setTestStarted(false);
                             if (!testWasStopped) {
                                 setExamineesFinished(true);

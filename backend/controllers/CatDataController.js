@@ -2,12 +2,12 @@ const sequelize = require('../models').sequelize;
 const CurrentTest = require('../models').CurrentTest;
 const User = require('../models').User;
 const CATdata = require('../models').CatData;
-const computeProbability = require('../algorithm/ComputeProbability')
-    .computeProbability;
+const computeProbability =
+    require('../algorithm/ComputeProbability').computeProbability;
 const computeIIF = require('../algorithm/IIF').computeIIF;
 const scoreToZScore = require('../algorithm/scoreToZScore').scoreToZScore;
-const computeNewAbility = require('../algorithm/CandidateAbility')
-    .computeNewAbility;
+const computeNewAbility =
+    require('../algorithm/CandidateAbility').computeNewAbility;
 const computeSE = require('../algorithm/StandardError').computeSE;
 
 //GET

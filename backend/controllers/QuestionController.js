@@ -2,10 +2,31 @@ const Question = require('../models').Question;
 const UserAnswer = require('../models').UserAnswer;
 const QuestionAnalytics = require('../models').QuestionAnalytics;
 const Choice = require('../models').Choice;
+const Topics = require('../models').Topic;
 const User = require('../models').User;
 const sequelize = require('../models').sequelize;
 const { Op } = require('sequelize');
 const zScoreToScore = require('../algorithm/ZScoreToScore').zScoreToScore;
+
+//AUX
+const getTopicsIdArray = async () => {
+    try {
+        let topicsIdArray = await Topics.findAll({
+            attributes: ['id'],
+        });
+
+        topicsIdArray.forEach((element, i, array) => {
+            array[i] = element.id;
+        });
+        return topicsIdArray;
+    } catch (err) {
+        throw new Error(err.message);
+    }
+};
+
+const getNextTopicId = (currNoQuestions, topicsIdArray) => {
+    return topicsIdArray[currNoQuestions % topicsIdArray.length];
+};
 
 const getAnsweredQuestions = async userId => {
     try {
@@ -51,6 +72,7 @@ const addUserAnswer = async (req, res) => {
 };
 
 const getNextQuestion = async (req, res) => {
+    let topicsIdArray = await getTopicsIdArray();
     let candiateAbility = zScoreToScore(
         req.params.stdError,
         req.params.ability,
@@ -80,6 +102,10 @@ const getNextQuestion = async (req, res) => {
             ],
             where: {
                 id: { [Op.notIn]: answeredQuestionsIdArray },
+                topicId: getNextTopicId(
+                    req.params.noQuestions + 1,
+                    topicsIdArray
+                ),
             },
         });
 

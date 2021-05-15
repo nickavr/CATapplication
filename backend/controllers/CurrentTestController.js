@@ -1,4 +1,5 @@
 const CurrentTest = require('../models').CurrentTest;
+const QuestionAnalytics = require('../models').QuestionAnalytics;
 const User = require('../models').User;
 const UserAnswer = require('../models').UserAnswer;
 const TestToken = require('../models').TestToken;
@@ -106,6 +107,11 @@ const examinerStopTestUpdateDB = async (userArray, test) => {
             result: 0,
         },
     });
+    await QuestionAnalytics.destroy({
+        where: {
+            probability: null,
+        },
+    });
     await test.destroy();
     for (user of userArray) {
         await deleteGenericTestData(user.id);
@@ -166,6 +172,7 @@ const examinerStopTest = async (req, res) => {
             examiner_email: reqData.examinerEmail,
         },
     });
+
     examinerStopTestUpdateDB(reqData.usersForTest, test)
         .then(res.status(200).send('Updated BD on stop test condition'))
         .catch(err => {

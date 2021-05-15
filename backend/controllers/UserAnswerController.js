@@ -7,6 +7,7 @@ const computeProbability =
 const computeNewDifficulty =
     require('../algorithm/QuestionDifficulty').computeNewDifficulty;
 const scoreToZScore = require('../algorithm/scoreToZScore').scoreToZScore;
+const zScoreToScore = require('../algorithm/ZScoreToScore').zScoreToScore;
 const computeIIF = require('../algorithm/IIF').computeIIF;
 const constants = require('../algorithm/AlgorithmConstants.json');
 const { Op } = require('sequelize');
@@ -88,21 +89,35 @@ const updateQuestionsDifficulty = async (req, res) => {
                     questionId: answeredQuestions[i].id,
                 },
             });
-            res.status(200).send(questionDataArray);
+
             questionDataArray.forEach(element => {
                 correctAnswersSum += element.isCorrect;
                 probabilitySum += element.probability;
                 IIFSum += computeIIF(element.probability);
             });
-            newDifficulty = computeNewDifficulty(
+
+            let estimatedDifficultyZScore = scoreToZScore(
+                constants.stdError,
                 answeredQuestions[i].estimated_difficulty,
+                1
+            );
+
+            newDifficulty = computeNewDifficulty(
+                estimatedDifficultyZScore,
                 probabilitySum,
                 correctAnswersSum,
                 IIFSum
             );
+
             testNewDifficultyArray.push(newDifficulty);
             await Question.update(
-                { suggested_difficulty: newDifficulty },
+                {
+                    suggested_difficulty: zScoreToScore(
+                        constants.stdError,
+                        newDifficulty,
+                        1
+                    ),
+                },
                 {
                     where: {
                         id: answeredQuestions[i].id,
