@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Ai from 'react-icons/ai';
+import * as Bs from 'react-icons/bs';
 import * as Io from 'react-icons/io';
 import * as Md from 'react-icons/md';
 
@@ -51,6 +51,15 @@ export const SidebarData = [
         title: 'Statistics',
         path: '/statistics',
         icon: <Io.IoIosPie />,
+        colName: 'nav-text',
+        status: 'examiner',
+        display: false,
+    },
+
+    {
+        title: 'Manage questions',
+        path: '/manage-questions',
+        icon: <Bs.BsQuestionSquareFill />,
         colName: 'nav-text',
         status: 'examiner',
         display: false,

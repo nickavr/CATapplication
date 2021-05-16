@@ -1,70 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useTable } from 'react-table';
+import React from 'react';
+import MaterialTable from 'material-table';
 
-function CandidatesResultsTable({ data }) {
-    const columns = React.useMemo(
-        () => [
-            {
-                Header: 'Name',
-                columns: [
-                    {
-                        Header: 'First Name',
-                        accessor: 'firstName',
-                    },
-                    {
-                        Header: 'Last Name',
-                        accessor: 'lastName',
-                    },
-                ],
-            },
-            {
-                Header: 'Info',
-                columns: [
-                    {
-                        Header: 'Grade',
-                        accessor: 'grade',
-                    },
-                ],
-            },
-        ],
-        []
-    );
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable({
-            columns,
-            data,
-        });
-    // Render the UI for your table
+function CandidatesResultsTable(props) {
     return (
-        <table {...getTableProps()}>
-            <thead>
-                {headerGroups.map(headerGroup => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map(column => (
-                            <th {...column.getHeaderProps()}>
-                                {column.render('Header')}
-                            </th>
-                        ))}
-                    </tr>
-                ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-                {rows.map((row, i) => {
-                    prepareRow(row);
-                    return (
-                        <tr {...row.getRowProps()}>
-                            {row.cells.map(cell => {
-                                return (
-                                    <td {...cell.getCellProps()}>
-                                        {cell.render('Cell')}
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    );
-                })}
-            </tbody>
-        </table>
+        <div style={{ maxWidth: '100%' }}>
+            <MaterialTable
+                columns={props.columns}
+                data={props.data}
+                title="Examinees Results"
+                options={{
+                    search: true,
+                    paging: false,
+                    filtering: true,
+                    exportButton: true,
+                }}
+            />
+        </div>
     );
 }
 

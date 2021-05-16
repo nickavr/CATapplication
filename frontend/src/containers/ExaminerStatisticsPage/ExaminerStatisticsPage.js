@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { VictoryChart, VictoryScatter } from 'victory';
-import { Multiselect } from 'multiselect-react-dropdown';
 import UserService from '../../Services/UserService';
 import SelectTestComponent from '../../components/SelectTestComponent/SelectTestComponent';
 import './ExaminerStatisticsPage.css';
@@ -64,11 +63,29 @@ function ExaminerStatisticsPage() {
             });
     };
 
+    const retrieveData = () => {
+        axios
+            .get(
+                `${URL.API_BASE_URL}/results/dates/${
+                    UserService.getUserFromStorage().email
+                }`
+            )
+            .then(res => {
+                return res.data;
+            })
+            .catch(err => {
+                throw new Error(err.mesage);
+            });
+    };
+
     return (
         <div className="stats-container">
             <div className="stats-container-contents">
                 <div className="stats-data">
-                    <SelectTestComponent onSelect={onDateSelect} />
+                    <SelectTestComponent
+                        onSelect={onDateSelect}
+                        retrieveData={retrieveData}
+                    />
                     <div className="stats-cards">
                         <div className="card">
                             <h3>Average grade</h3>

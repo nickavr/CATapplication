@@ -69,6 +69,13 @@ const QuestionComponent = props => {
                         candidateAbility = res.data.normalScore.toFixed(2);
                         setShowScore(true);
                         UserService.deleteTestToken();
+                        axios
+                            .get(
+                                `${
+                                    URL.API_BASE_URL
+                                }/users/${UserService.getUserId()}/questions/0/0/${noQuestions}`
+                            )
+                            .catch(err => console.log(err.message));
                     })
                     .catch(err => console.log(err.message));
 

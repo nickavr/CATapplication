@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LandingPage from './containers/LandingPage/LandingPage';
-import HomePage from './containers/HomePage/HomePage';
+import ManageQuestions from './containers/ManageQuestionsPage/ManageQuestionsPage';
 import StartTestPage from './containers/StartTestPage/StartTestPage';
 import QuestionComponent from './components/QuestionComponent/QuestionComponent';
 import JoinTestPage from './containers/JoinTestPage/JoinTestPage';
 import ExaminerStatsPage from './containers/ExaminerStatisticsPage/ExaminerStatisticsPage';
 import TestResults from './containers/ExaminerTestResults/TestResults';
+import CandidateAnalytics from './containers/CandidateAnalyticsPage/CandidateAnalytics';
 import SideMenu from './components/SideBarMenu/SBM';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -31,6 +32,12 @@ export default function Routes() {
                         </ProtectedRoute>
                         <ProtectedRoute path="/statistics">
                             <ExaminerStatsPage />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/manage-questions">
+                            <ManageQuestions />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/analytics">
+                            <CandidateAnalytics />
                         </ProtectedRoute>
                     </Switch>
                 </div>

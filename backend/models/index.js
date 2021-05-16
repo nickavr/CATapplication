@@ -53,10 +53,18 @@ const QuestionAnalytics = require(path.join(__dirname, './QuestionAnalytics'))(
     sequelize,
     Sequelize.DataTypes
 );
+const TestAnalytics = require(path.join(__dirname, './TestAnalytics'))(
+    sequelize,
+    Sequelize.DataTypes
+);
 
 //users -> tests (1:M)
 User.hasMany(TestResult, { onDelete: 'cascade' });
 TestResult.belongsTo(User, { onDelete: 'cascade' });
+
+//testResults -> testAnalytics (1:M)
+TestResult.hasMany(TestAnalytics, { onDelete: 'cascade' });
+TestAnalytics.belongsTo(TestResult, { onDelete: 'cascade' });
 
 //users -> roles (M:M)
 User.belongsToMany(Role, { through: 'user_role' });
@@ -78,13 +86,13 @@ CatData.belongsTo(User, { onDelete: 'cascade' });
 CurrentTest.hasMany(User);
 User.belongsTo(CurrentTest, { onDelete: 'cascade' });
 
-//testResults -> resources (1:M)
-TestResult.hasMany(Resource, { onDelete: 'cascade' });
-Resource.belongsTo(TestResult, { onDelete: 'cascade' });
-
 //topics -> resources (1:M)
 Topic.hasMany(Resource, { onDelete: 'cascade' });
 Resource.belongsTo(Topic, { onDelete: 'cascade' });
+
+//topics -> testAnalytics (1:M)
+Topic.hasMany(TestAnalytics, { onDelete: 'cascade' });
+TestAnalytics.belongsTo(Topic, { onDelete: 'cascade' });
 
 //topics -> questions (1:M)
 Topic.hasMany(Question, { onDelete: 'cascade' });
@@ -113,4 +121,5 @@ module.exports = {
     Role,
     UserRole,
     Topic,
+    TestAnalytics,
 };

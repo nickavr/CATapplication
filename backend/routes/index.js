@@ -8,6 +8,7 @@ const questionController = require('../controllers/QuestionController');
 const catDataController = require('../controllers/CatDataController');
 const testResultController = require('../controllers/TestResultsController');
 const userAnswerController = require('../controllers/UserAnswerController');
+const testAnalyticsController = require('../controllers/TestAnalyticsContoller');
 const JWTmiddleware = require('../Middleware/JWT');
 const { CurrentTest } = require('../models');
 
@@ -54,6 +55,7 @@ router.get(
     questionController.getNextQuestion
 );
 router.post('/user-answers', questionController.addUserAnswer);
+router.get('/questions/choices', questionController.getAllQuestionsAndAnswers);
 
 //CAT-DATA
 router.post('/cat-data', catDataController.setCatData);
@@ -70,6 +72,13 @@ router.get(
     '/results/dates/:email',
     testResultController.getAllDatesForExaminer
 );
+router.post(
+    '/results/dates/:id',
+    testResultController.getAllDatesForCandidates
+);
 router.post('/results', testResultController.getResultsData);
+
+//TEST-ANALYTICS
+router.get('/topics', testAnalyticsController.getAllTopics);
 
 module.exports = router;
