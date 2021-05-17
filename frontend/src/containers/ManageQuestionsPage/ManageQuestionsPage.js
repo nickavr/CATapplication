@@ -25,6 +25,20 @@ const tableColumns = [
     },
 ];
 
+const choicesColumns = [
+    //FIXME: validate input data
+    {
+        title: 'Choice text',
+        field: 'choice_text',
+        editable: 'never',
+    },
+    {
+        title: 'Correct',
+        field: 'isCorrect',
+        editable: 'never',
+    },
+];
+
 function ManageQuestionsPage() {
     let [tableData, setTableData] = useState([]);
 
@@ -42,7 +56,11 @@ function ManageQuestionsPage() {
     return (
         <div className="manage-questions-page">
             <div className="questions-table">
-                <QuestionTable columns={tableColumns} data={tableData} />
+                <QuestionTable
+                    columns={tableColumns}
+                    data={tableData}
+                    choicesColums={choicesColumns}
+                />
             </div>
         </div>
     );
