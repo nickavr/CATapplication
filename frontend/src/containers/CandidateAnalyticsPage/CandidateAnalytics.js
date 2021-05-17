@@ -1,71 +1,103 @@
 import React, { useEffect, useState } from 'react';
+import UserService from '../../Services/UserService';
 import SelectCandidateTest from '../../components/SelectCandidateTest/SelectCandidateTest';
-import {
-    VictoryChart,
-    VictoryBar,
-    VictoryPolarAxis,
-    VictoryTheme,
-    VictoryLine,
-} from 'victory';
+import { PolarArea, Line } from 'react-chartjs-2';
 import axios from 'axios';
 import './CandidateAnalytics.css';
-
+const computeArrayForLine =
+    require('./ComputationFunctions').computeArrayForLine;
+const computeArrayForPolar =
+    require('./ComputationFunctions').computeArrayForPolar;
 const URL = require('../../config/url-info.json');
 
+let polarData = {
+    labels: [],
+    datasets: [
+        {
+            label: 'Topics accuracy in %',
+            data: [],
+            backgroundColor: [`#f1c40f`],
+            borderWidth: 1,
+        },
+    ],
+};
+
+let lineData = {
+    labels: [],
+    datasets: [
+        {
+            label: 'Ability evolution',
+            data: [],
+            fill: false,
+            backgroundColor: `#f1c40f`,
+            borderColor: `#f1c40f`,
+        },
+    ],
+};
+
+const lineOptions = {
+    maintainAspectRatio: false,
+    scales: {
+        yAxes: [
+            {
+                ticks: {
+                    beginAtZero: true,
+                },
+            },
+        ],
+    },
+};
+
+let topics = [];
+
 function CandidateAnalytics() {
-    let [topics, setTopics] = useState(['dummy']);
+    let [graphUpdate, setGraphUpdate] = useState(false);
+
     useEffect(() => {
         axios.get(`${URL.API_BASE_URL}/topics`).then(res => {
-            setTopics(res.data);
+            console.log(res.data);
+            topics = res.data;
         });
     }, []);
+
+    let onDateSelect = (selectedList, selectedItem) => {
+        axios
+            .post(`${URL.API_BASE_URL}/test/analytics`, {
+                userId: `${UserService.getUserFromStorage().id}`,
+                date: `${selectedItem.date}`,
+            })
+            .then(res => {
+                lineData = computeArrayForLine(res.data, lineData);
+                polarData = computeArrayForPolar(res.data, topics);
+                setGraphUpdate(!graphUpdate);
+            })
+            .catch(err => {
+                throw new Error(err.mesage);
+            });
+    };
+
+    //TODO: set default 100 for the polar graph
+
     return (
         <div className="analytics-container">
             <div className="general-container">
-                <SelectCandidateTest />
+                <SelectCandidateTest onSelect={onDateSelect} />
                 <div className="graphs-container">
-                    <VictoryChart polar theme={VictoryTheme.material}>
-                        {topics.map((d, i) => {
-                            return (
-                                <VictoryPolarAxis
-                                    dependentAxis
-                                    key={i}
-                                    label={d}
-                                    labelPlacement="perpendicular"
-                                    style={{ tickLabels: { fill: 'none' } }}
-                                    axisValue={d}
-                                />
-                            );
-                        })}
-                        <VictoryBar
-                            style={{
-                                data: {
-                                    fill: 'var(--accent-color)',
-                                    width: 25,
+                    <PolarArea
+                        data={polarData}
+                        width={10}
+                        height={5}
+                        options={{
+                            maintainAspectRatio: false,
+                            scale: {
+                                ticks: {
+                                    min: 0,
+                                    max: 100,
                                 },
-                            }}
-                            data={[
-                                { x: topics[0], y: 10 },
-                                { x: topics[1], y: 25 },
-                                { x: topics[2], y: 40 },
-                            ]}
-                        />
-                    </VictoryChart>
-                    <VictoryChart theme={VictoryTheme.material}>
-                        <VictoryLine
-                            style={{
-                                data: { stroke: '#c43a31' },
-                                parent: { border: '1px solid #ccc' },
-                            }}
-                            data={[
-                                { x: 1, y: 2 },
-                                { x: 2, y: 3 },
-                                { x: 3, y: 5 },
-                                { x: 4, y: 4 },
-                                { x: 5, y: 7 },
-                            ]}
-                        />
-                    </VictoryChart>
+                            },
+                        }}
+                    />
+                    <Line data={lineData} options={lineOptions} />
                 </div>
             </div>
         </div>

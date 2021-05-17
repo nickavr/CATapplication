@@ -80,5 +80,9 @@ router.post('/results', testResultController.getResultsData);
 
 //TEST-ANALYTICS
 router.get('/topics', testAnalyticsController.getAllTopics);
+router.post(
+    '/test/analytics',
+    testAnalyticsController.getTestAnalyticsForCandidate
+);
 
 module.exports = router;

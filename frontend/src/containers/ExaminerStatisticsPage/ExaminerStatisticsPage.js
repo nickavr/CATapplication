@@ -63,29 +63,11 @@ function ExaminerStatisticsPage() {
             });
     };
 
-    const retrieveData = () => {
-        axios
-            .get(
-                `${URL.API_BASE_URL}/results/dates/${
-                    UserService.getUserFromStorage().email
-                }`
-            )
-            .then(res => {
-                return res.data;
-            })
-            .catch(err => {
-                throw new Error(err.mesage);
-            });
-    };
-
     return (
         <div className="stats-container">
             <div className="stats-container-contents">
                 <div className="stats-data">
-                    <SelectTestComponent
-                        onSelect={onDateSelect}
-                        retrieveData={retrieveData}
-                    />
+                    <SelectTestComponent onSelect={onDateSelect} />
                     <div className="stats-cards">
                         <div className="card">
                             <h3>Average grade</h3>
