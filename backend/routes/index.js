@@ -56,6 +56,8 @@ router.get(
 );
 router.post('/user-answers', questionController.addUserAnswer);
 router.get('/questions/choices', questionController.getAllQuestionsAndAnswers);
+router.put('/questions/:id', questionController.updateQuestion);
+router.delete('/questions/:id', questionController.deleteQuestion);
 
 //CAT-DATA
 router.post('/cat-data', catDataController.setCatData);

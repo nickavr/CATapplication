@@ -196,9 +196,44 @@ const getNextQuestion = async (req, res) => {
     }
 };
 
+//PUT
+
+const updateQuestion = async (req, res) => {
+    try {
+        await Question.update(
+            { estimated_difficulty: req.body.updatedDifficulty },
+            {
+                where: {
+                    id: req.params.id,
+                },
+            }
+        );
+        res.status(200).send();
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};
+
+//delete
+
+const deleteQuestion = async (req, res) => {
+    try {
+        await Question.destroy({
+            where: {
+                id: req.params.id,
+            },
+        });
+        res.status(200).send();
+    } catch (err) {
+        res.status(500).senda(err.message);
+    }
+};
+
 module.exports = {
     getNextQuestion,
     getAnsweredQuestions,
     addUserAnswer,
     getAllQuestionsAndAnswers,
+    updateQuestion,
+    deleteQuestion,
 };

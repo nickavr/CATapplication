@@ -16,7 +16,6 @@ const tableColumns = [
     {
         title: 'Difficulty',
         field: 'estimated_difficulty',
-        type: 'numeric',
     },
     {
         title: 'Suggested difficulty',
