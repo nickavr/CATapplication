@@ -56,11 +56,6 @@ const setCatData = async (req, res) => {
     let iif = computeIIF(newProbability);
 
     try {
-        await addTestAnalytics(
-            questionResponse,
-            candidateCurrentAbility,
-            req.body.userId
-        );
         await CATdata.update(
             {
                 probability_sum: sequelize.literal(
@@ -88,6 +83,12 @@ const setCatData = async (req, res) => {
             updatedCatData.probability_sum,
             updatedCatData.response_sum,
             updatedCatData.iif_sum
+        );
+
+        await addTestAnalytics(
+            questionResponse,
+            newEstimatedAbility,
+            req.body.userId
         );
 
         let newStdError = computeSE(updatedCatData.iif_sum);

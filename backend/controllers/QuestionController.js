@@ -129,40 +129,66 @@ const addUserAnswer = async (req, res) => {
     }
 };
 
-const getNextQuestion = async (req, res) => {
-    let topicsIdArray = await getTopicsIdArray();
-    let candiateAbility = zScoreToScore(
-        req.params.stdError,
-        req.params.ability,
-        req.params.noQuestions
-    );
-    let answeredQuestionsIdArray = await getAnsweredQuestions(req.params.id);
-    let nextTopicId = getNextTopicId(req.params.noQuestions + 1, topicsIdArray);
-    await updateTestAnalytics(nextTopicId, req.params.id);
-    try {
-        let question = await Question.findOne({
-            include: [
-                {
-                    model: Choice,
-                },
-            ],
-            limit: 1,
-            order: [
-                [
-                    sequelize.fn(
-                        'ABS',
-                        sequelize.literal(
-                            `estimated_difficulty - ${candiateAbility}`
-                        )
-                    ),
-                    'ASC',
-                ],
-            ],
-            where: {
-                id: { [Op.notIn]: answeredQuestionsIdArray },
-                topicId: nextTopicId,
+const getQuestionFromBd = async (
+    answeredQuestionsIdArray,
+    nextTopicId,
+    candidateAbility
+) => {
+    let question = await Question.findOne({
+        include: [
+            {
+                model: Choice,
             },
-        });
+        ],
+        limit: 1,
+        order: [
+            [
+                sequelize.fn(
+                    'ABS',
+                    sequelize.literal(
+                        `estimated_difficulty - ${candidateAbility}`
+                    )
+                ),
+                'ASC',
+            ],
+        ],
+        where: {
+            id: { [Op.notIn]: answeredQuestionsIdArray },
+            topicId: nextTopicId,
+        },
+    });
+    return question;
+};
+
+const getNextQuestion = async (req, res) => {
+    try {
+        let topicsIdArray = await getTopicsIdArray();
+        let candidateAbility = zScoreToScore(
+            req.params.stdError,
+            req.params.ability,
+            req.params.noQuestions
+        );
+        let answeredQuestionsIdArray = await getAnsweredQuestions(
+            req.params.id
+        );
+        let nextTopicId = getNextTopicId(
+            req.params.noQuestions + 1,
+            topicsIdArray
+        );
+        await updateTestAnalytics(nextTopicId, req.params.id);
+
+        let question = null;
+
+        while (question == null) {
+            question = await getQuestionFromBd(
+                answeredQuestionsIdArray,
+                nextTopicId,
+                candidateAbility
+            );
+            if (question == null) {
+                nextTopicId++;
+            }
+        }
 
         res.status(200).send(question);
     } catch (err) {
