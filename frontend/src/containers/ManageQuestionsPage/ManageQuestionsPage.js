@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import QuestionTable from '../../components/QuestionsTable/QuestionsTable';
 import UserService from '../../Services/UserService';
+import QuestionForm from '../../components/QuestionForm/QuestionForm';
 import './ManageQuestionsPage.css';
 
 const URL = require('../../config/url-info.json');
@@ -40,7 +41,15 @@ const choicesColumns = [
 
 function ManageQuestionsPage() {
     let [tableData, setTableData] = useState([]);
+    let [showForm, setShowForm] = useState(false);
 
+    const handleShowForm = () => {
+        setShowForm(true);
+    };
+
+    const handleCloseForm = () => {
+        setShowForm(false);
+    };
     useEffect(() => {
         axios
             .get(`${URL.API_BASE_URL}/questions/choices`)
@@ -55,10 +64,20 @@ function ManageQuestionsPage() {
     return (
         <div className="manage-questions-page">
             <div className="questions-table">
+                <button
+                    className="btn-signin btn-lg btn-block btn-question-form"
+                    onClick={() => handleShowForm()}
+                >
+                    Open question form
+                </button>
                 <QuestionTable
                     columns={tableColumns}
                     data={tableData}
                     choicesColums={choicesColumns}
+                />
+                <QuestionForm
+                    showAddModal={showForm}
+                    handleCloseForm={handleCloseForm}
                 />
             </div>
         </div>
