@@ -5,6 +5,7 @@ const loginController = require('../controllers/LoginController');
 const roleController = require('../controllers/RoleController');
 const currentTestController = require('../controllers/CurrentTestController');
 const questionController = require('../controllers/QuestionController');
+const topicsController = require('../controllers/TopicsController');
 const catDataController = require('../controllers/CatDataController');
 const testResultController = require('../controllers/TestResultsController');
 const userAnswerController = require('../controllers/UserAnswerController');
