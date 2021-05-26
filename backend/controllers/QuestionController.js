@@ -26,6 +26,19 @@ const getTopicsIdArray = async () => {
     }
 };
 
+const getTopicByName = async topicName => {
+    try {
+        let topic = await Topics.findOne({
+            where: {
+                topic_name: topicName,
+            },
+        });
+        return topic;
+    } catch (err) {
+        throw new Error(err.message);
+    }
+};
+
 const updateTestAnalytics = async (topicId, userId) => {
     try {
         await TestAnalytics.update(
@@ -229,6 +242,33 @@ const deleteQuestion = async (req, res) => {
     }
 };
 
+//POST
+const addNewQuestion = async (req, res) => {
+    try {
+        topic = await getTopicByName(req.body.question.questionData.topicName);
+
+        if (!topic) {
+            topic = await Topics.create({
+                topic_name: req.body.question.questionData.topicName,
+            });
+        }
+
+        let question = await Question.create(
+            {
+                topicId: topic.id,
+                question_text: req.body.question.questionData.questionText,
+                estimated_difficulty: req.body.question.questionData.difficulty,
+                suggested_difficulty: 0,
+                choices: req.body.question.choicesData,
+            },
+            { include: [Choice] }
+        );
+        res.status(200).send(question);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};
+
 module.exports = {
     getNextQuestion,
     getAnsweredQuestions,
@@ -236,4 +276,5 @@ module.exports = {
     getAllQuestionsAndAnswers,
     updateQuestion,
     deleteQuestion,
+    addNewQuestion,
 };

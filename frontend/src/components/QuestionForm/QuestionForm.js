@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import FormGroup from 'react-bootstrap/esm/FormGroup';
+import cogoToast from 'cogo-toast';
 import { validateQestionData } from './ValidateQuestionData';
 import { validateChoices } from './ValidateQuestionData';
 // import './QuestionForm.css';
@@ -20,7 +21,7 @@ function QuestionForm(props) {
     });
     const [topics, setTopics] = useState([]);
     const [choiceInputFields, setChoiceInputFields] = useState([
-        { choiceText: '', isCorrect: false },
+        { choice_text: '', isCorrect: false },
     ]);
 
     useEffect(() => {
@@ -50,7 +51,7 @@ function QuestionForm(props) {
 
     const handleAddFields = () => {
         const values = [...choiceInputFields];
-        values.push({ choiceText: '', isCorrect: false });
+        values.push({ choice_text: '', isCorrect: false });
         setChoiceInputFields(values);
     };
 
@@ -63,8 +64,6 @@ function QuestionForm(props) {
     };
 
     const handleAddQuestion = () => {
-        console.log(questionData);
-
         if (
             validateChoices(choiceInputFields) &&
             validateQestionData(questionData)
@@ -74,11 +73,18 @@ function QuestionForm(props) {
                 difficulty: 0,
                 topicName: '',
             });
-            setChoiceInputFields({ choiceText: '', isCorrect: false });
-            console.log('data is ok');
-
-            //TODO: send question and add it to db, also the topic if is new
-            //FIXME: bug on validation for choices ? inputChoicesField is not an array?
+            setChoiceInputFields([{ choice_text: '', isCorrect: false }]);
+            let inputQuestion = {
+                questionData: questionData,
+                choicesData: choiceInputFields,
+            };
+            console.log(inputQuestion);
+            cogoToast.success(`Question added successfuly`, {
+                hideAfter: 3,
+                position: 'top-center',
+                heading: `Success`,
+            });
+            props.handleCloseForm();
         }
     };
 
@@ -142,12 +148,11 @@ function QuestionForm(props) {
                                             onChange={e => {
                                                 const copyValues =
                                                     choiceInputFields.slice();
-                                                copyValues[index].choiceText =
+                                                copyValues[index].choice_text =
                                                     e.target.value;
                                                 setChoiceInputFields(
                                                     copyValues
                                                 );
-                                                console.log(choiceInputFields);
                                             }}
                                             type="text"
                                             placeholder="Enter choice text"

@@ -21,37 +21,49 @@ export const validateQestionData = questionData => {
 
 export const validateChoices = choicesArray => {
     let correctCounter = 0;
-    if (choicesArray.length < 1) {
+    let choiceLengthTooSmall = false;
+    if (choicesArray.length <= 1) {
         printErrorMessage(
             'You must provide minimum two choices',
             'Few choices'
         );
         return false;
-    }
-    choicesArray.forEach(element => {
-        if (element.isCorrect === true) {
-            correctCounter++;
-        }
-        if (element.choiceText.length < 1) {
+    } else {
+        choicesArray.forEach(element => {
+            console.log(element.choiceText.length);
+
+            if (element.isCorrect === true) {
+                correctCounter++;
+            }
+            if (element.choiceText.length < 1) {
+                choiceLengthTooSmall = true;
+            }
+        });
+
+        if (choiceLengthTooSmall) {
             printErrorMessage(
                 'You must provide the choice text',
                 'No choice text'
             );
             return false;
         }
-    });
-    if (correctCounter === 0) {
-        printErrorMessage('Choose a correct answer', 'Select correct choice');
-        return false;
+
+        if (correctCounter === 0) {
+            printErrorMessage(
+                'Choose a correct answer',
+                'Select correct choice'
+            );
+            return false;
+        }
+        if (correctCounter > 1) {
+            printErrorMessage(
+                'Choose only one correct answer',
+                'Too many correct choices'
+            );
+            return false;
+        }
+        return true;
     }
-    if (correctCounter > 1) {
-        printErrorMessage(
-            'Choose only one correct answer',
-            'Too many correct choices'
-        );
-        return false;
-    }
-    return true;
 };
 
 const printErrorMessage = (message, heading) => {

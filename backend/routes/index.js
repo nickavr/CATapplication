@@ -56,6 +56,7 @@ router.get(
     questionController.getNextQuestion
 );
 router.post('/user-answers', questionController.addUserAnswer);
+router.post('/questions', questionController.addNewQuestion);
 router.get('/questions/choices', questionController.getAllQuestionsAndAnswers);
 router.put('/questions/:id', questionController.updateQuestion);
 router.delete('/questions/:id', questionController.deleteQuestion);
