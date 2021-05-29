@@ -143,84 +143,93 @@ function StartTestPage(props) {
     };
 
     return (
-        <div className="start-test-container">
-            {!testStarted ? (
-                examineesFinished ? (
-                    <div className="score-section">
-                        <h2>All examinees have finished.</h2>
-                        <button
-                            className="btn-signin btn-lg btn-block"
-                            onClick={() => handleExamineesStoppedTest()}
-                        >
-                            Ok
-                        </button>
-                    </div>
+        <div className="start-test-page">
+            <div className="start-test-container">
+                {!testStarted ? (
+                    examineesFinished ? (
+                        <div className="score-section">
+                            <h2>All examinees have finished.</h2>
+                            <button
+                                className="btn-signin btn-lg btn-block"
+                                onClick={() => handleExamineesStoppedTest()}
+                            >
+                                Ok
+                            </button>
+                        </div>
+                    ) : (
+                        <Form className="start-test-form">
+                            <Form.Group controlId="start-test-form.AddParticipants">
+                                <Form.Label>
+                                    Add participants to the test:
+                                </Form.Label>
+                                <Multiselect
+                                    options={examineeArray}
+                                    displayValue="email"
+                                    closeIcon="square"
+                                    placeholder=""
+                                    onSelect={onUserSelect}
+                                    onRemove={onUserRemove}
+                                    style={{
+                                        chips: {
+                                            background: 'var(--accent-color)',
+                                        },
+                                        searchBox: {
+                                            background: '#fff',
+                                        },
+                                    }}
+                                />
+                            </Form.Group>
+
+                            <Form.Group controlId="start-test-form.MinimumTime">
+                                <Form.Label>
+                                    Max. test time(minutes):
+                                </Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="e.g. 20"
+                                    onChange={e => {
+                                        setTestData(prev => ({
+                                            ...prev,
+                                            maxMinutes: e.target.value,
+                                        }));
+                                    }}
+                                />
+                            </Form.Group>
+
+                            <Form.Group controlId="start-test-form.MinimumQuestions">
+                                <Form.Label>
+                                    Max. number of questions:
+                                </Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="e.g. 10"
+                                    onChange={e => {
+                                        setTestData(prev => ({
+                                            ...prev,
+                                            maxQuestions: e.target.value,
+                                        }));
+                                    }}
+                                />
+                            </Form.Group>
+                            <button
+                                type="button"
+                                className="btn-signin btn-lg btn-block"
+                                onClick={() => handleStartTest()}
+                            >
+                                Start test
+                            </button>
+                        </Form>
+                    )
                 ) : (
-                    <Form className="start-test-form">
-                        <Form.Group controlId="start-test-form.AddParticipants">
-                            <Form.Label>
-                                Add participants to the test:
-                            </Form.Label>
-                            <Multiselect
-                                options={examineeArray}
-                                displayValue="email"
-                                closeIcon="square"
-                                placeholder=""
-                                onSelect={onUserSelect}
-                                onRemove={onUserRemove}
-                                style={{
-                                    chips: {
-                                        background: 'var(--accent-color)',
-                                    },
-                                }}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="start-test-form.MinimumTime">
-                            <Form.Label>Max. test time(minutes):</Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="e.g. 20"
-                                onChange={e => {
-                                    setTestData(prev => ({
-                                        ...prev,
-                                        maxMinutes: e.target.value,
-                                    }));
-                                }}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="start-test-form.MinimumQuestions">
-                            <Form.Label>Max. number of questions:</Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="e.g. 10"
-                                onChange={e => {
-                                    setTestData(prev => ({
-                                        ...prev,
-                                        maxQuestions: e.target.value,
-                                    }));
-                                }}
-                            />
-                        </Form.Group>
-                        <button
-                            type="button"
-                            className="btn-signin btn-lg btn-block"
-                            onClick={() => handleStartTest()}
-                        >
-                            Start test
-                        </button>
-                    </Form>
-                )
-            ) : (
-                <button
-                    type="button"
-                    className="btn-signin btn-lg btn-block"
-                    onClick={() => handleStopTest()}
-                >
-                    Stop test
-                </button>
-            )}
+                    <button
+                        type="button"
+                        className="btn-signin btn-lg btn-block"
+                        onClick={() => handleStopTest()}
+                    >
+                        Stop test
+                    </button>
+                )}
+            </div>
         </div>
     );
 }

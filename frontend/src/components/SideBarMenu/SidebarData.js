@@ -30,6 +30,14 @@ export const SidebarData = [
         status: 'examinee',
         display: false,
     },
+    {
+        title: 'Resources',
+        path: '/resources',
+        icon: <Io.IoIosBookmarks />,
+        colName: 'nav-text',
+        status: 'examinee',
+        display: false,
+    },
     // Examiner
     {
         title: 'Test results',

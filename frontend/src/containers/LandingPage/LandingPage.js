@@ -74,7 +74,7 @@ function LandingPage(props, context) {
         <header className="landingPage-container">
             <div className="hero-textbox">
                 <h1>
-                    Welcome to AdapTest. <br />
+                    Welcome to Testerly. <br />
                     Use your institutional email.
                 </h1>
                 <GoogleLogin

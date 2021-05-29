@@ -9,7 +9,7 @@ import FormGroup from 'react-bootstrap/esm/FormGroup';
 import cogoToast from 'cogo-toast';
 import { validateQestionData } from './ValidateQuestionData';
 import { validateChoices } from './ValidateQuestionData';
-// import './QuestionForm.css';
+import './QuestionForm.css';
 
 const URL = require('../../config/url-info.json');
 
@@ -157,8 +157,9 @@ function QuestionForm(props) {
                                             type="text"
                                             placeholder="Enter choice text"
                                         ></Form.Control>
-                                        <div>
+                                        <div className="choices-buttons">
                                             <ToggleButton
+                                                className="btn-correct-choice"
                                                 type="checkbox"
                                                 variant="secondary"
                                                 checked={
@@ -183,12 +184,10 @@ function QuestionForm(props) {
                                                     );
                                                 }}
                                             >
-                                                Checked
+                                                Correct
                                             </ToggleButton>
-                                        </div>
-                                        <div>
                                             <button
-                                                className="btn btn-link"
+                                                className="btn-signin btn-lg btn-block btn-choice"
                                                 type="button"
                                                 onClick={() =>
                                                     handleRemoveFields(index)
@@ -197,7 +196,7 @@ function QuestionForm(props) {
                                                 -
                                             </button>
                                             <button
-                                                className="btn btn-link"
+                                                className="btn-signin btn-lg btn-block btn-choice"
                                                 type="button"
                                                 onClick={() =>
                                                     handleAddFields()
@@ -220,6 +219,7 @@ function QuestionForm(props) {
                         Close
                     </Button>
                     <Button
+                        className="btn-signin"
                         variant="primary"
                         onClick={() => handleAddQuestion()}
                     >

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import QuestionTable from '../../components/QuestionsTable/QuestionsTable';
-import UserService from '../../Services/UserService';
 import QuestionForm from '../../components/QuestionForm/QuestionForm';
 import './ManageQuestionsPage.css';
 

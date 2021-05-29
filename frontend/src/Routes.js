@@ -7,6 +7,7 @@ import JoinTestPage from './containers/JoinTestPage/JoinTestPage';
 import ExaminerStatsPage from './containers/ExaminerStatisticsPage/ExaminerStatisticsPage';
 import TestResults from './containers/ExaminerTestResults/TestResults';
 import CandidateAnalytics from './containers/CandidateAnalyticsPage/CandidateAnalytics';
+import ResourcesPage from './containers/ResourcesPage/ResourcesPage';
 import SideMenu from './components/SideBarMenu/SBM';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -38,6 +39,9 @@ export default function Routes() {
                         </ProtectedRoute>
                         <ProtectedRoute path="/analytics">
                             <CandidateAnalytics />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/resources">
+                            <ResourcesPage />
                         </ProtectedRoute>
                     </Switch>
                 </div>

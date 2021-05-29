@@ -5,13 +5,12 @@ const loginController = require('../controllers/LoginController');
 const roleController = require('../controllers/RoleController');
 const currentTestController = require('../controllers/CurrentTestController');
 const questionController = require('../controllers/QuestionController');
-const topicsController = require('../controllers/TopicsController');
 const catDataController = require('../controllers/CatDataController');
 const testResultController = require('../controllers/TestResultsController');
 const userAnswerController = require('../controllers/UserAnswerController');
+const resourceComtroller = require('../controllers/ResourceController');
 const testAnalyticsController = require('../controllers/TestAnalyticsContoller');
 const JWTmiddleware = require('../Middleware/JWT');
-const { CurrentTest } = require('../models');
 
 //AUTH:
 router.post('/login', loginController.loginAuth);
@@ -88,5 +87,8 @@ router.post(
     '/test/analytics',
     testAnalyticsController.getTestAnalyticsForCandidate
 );
+
+//resources
+// router.get('/resources', resourceComtroller.getLink); //test
 
 module.exports = router;

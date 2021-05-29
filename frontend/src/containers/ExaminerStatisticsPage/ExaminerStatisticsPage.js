@@ -84,7 +84,7 @@ function ExaminerStatisticsPage() {
                     </div>
                 </div>
                 <div className="scatter-plot">
-                    <VictoryChart domain={{ x: [0, 22], y: [0, 10] }}>
+                    <VictoryChart domain={{ x: [0, 10], y: [0, 60] }}>
                         <VictoryScatter
                             style={{ data: { fill: 'var(--accent-color)' } }}
                             bubbleProperty="amount"
