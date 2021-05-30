@@ -1,14 +1,22 @@
-// const SerpApi = require('google-search-results-nodejs');
-// const search = new SerpApi.GoogleSearch(
-//     'AIzaSyDgosQYxFiTuhMXX6EyvXWaQoxR7s4AYLs'
-// );
+const googleIt = require('google-it');
 
-// const getLink = async (req, res) => {
-//     fetch('https://customsearch.googleapis.com/customsearch/v1')
-//         .then(response => response.json())
-//         .then(data => res.status(200).send(data));
-// };
+const putGoogleLinks = async topics => {
+    let allLinks = [];
+    try {
+        for (let i = 0; i < topics.length; i++) {
+            let result = await googleIt({ query: `${topics[i].topic_name}` });
+            allLinks.push({ topic: topics[i].topic_name, links: result });
+        }
+        return allLinks;
+    } catch (err) {
+        throw new Error(err.message);
+    }
+};
 
-// module.exports = {
-//     getLink,
-// };
+const getLinks = async (req, res) => {
+    putGoogleLinks(req.body.topics).then(links => res.status(200).send(links));
+};
+
+module.exports = {
+    getLinks,
+};
