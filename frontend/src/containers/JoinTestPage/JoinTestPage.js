@@ -26,6 +26,8 @@ function JoinTestPage() {
     useEffect(() => {
         searchInterval = setInterval(() => {
             if (currentTest) {
+                console.log('test started, examinee interval');
+
                 axios
                     .get(
                         `${
@@ -36,8 +38,13 @@ function JoinTestPage() {
                         if (!res.data) {
                             console.log('examiner stoppedddd');
                             UserService.deleteTestToken();
+                            //FIXME: state is not updated ????
                             setCurrentTest(false);
                             setExaminerStoppedTest(true);
+                            console.log(`currentTest ${currentTest}`);
+                            console.log(
+                                `examinerStoppedTest ${examinerStoppedTest}`
+                            );
                             clearInterval(searchInterval);
                         }
                     });
@@ -47,7 +54,7 @@ function JoinTestPage() {
         return () => {
             clearInterval(searchInterval);
         };
-    }, [currentTest]);
+    }, [currentTest, examinerStoppedTest]);
 
     const handleJoinTest = () => {
         axios

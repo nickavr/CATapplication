@@ -1,0 +1,22 @@
+.choices-buttons {
+    display: flex;
+    width: 100%;
+    flex-flow: row;
+    justify-content: baseline;
+    align-items: baseline;
+}
+
+.btn-choice {
+    margin: 2% 5%;
+    padding: 0 1px 1px 0;
+    width: 5%;
+    align-self: baseline;
+}
+
+.btn-correct-choice {
+    width: 20%;
+}
+
+.btn-primary {
+    margin-bottom: 0.64%;
+}

@@ -1,0 +1,43 @@
+.stats-container {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--base-light);
+    display: flex;
+    justify-content: center;
+}
+
+.stats-container-contents {
+    margin-top: -10%;
+    width: 70%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+}
+
+.stats-data {
+    width: 30%;
+    display: flexbox;
+    justify-content: space-around;
+    /* margin: 0% auto; */
+}
+
+.card {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+    margin: 6% auto;
+
+    /* background-color: var(--base-light); */
+    border-radius: 30px;
+    padding: 30px 10px;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.scatter-plot {
+    display: flex;
+    flex-grow: 4;
+    /* margin: auto; */
+    width: 50%;
+}

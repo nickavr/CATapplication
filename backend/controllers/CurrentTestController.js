@@ -1,5 +1,7 @@
 const CurrentTest = require('../models').CurrentTest;
+const QuestionAnalytics = require('../models').QuestionAnalytics;
 const User = require('../models').User;
+const UserAnswer = require('../models').UserAnswer;
 const TestToken = require('../models').TestToken;
 const CATdata = require('../models').CatData;
 const TestResult = require('../models').TestResult;
@@ -89,6 +91,11 @@ const deleteGenericTestData = async id => {
                 userId: id,
             },
         });
+        await UserAnswer.destroy({
+            where: {
+                userId: id,
+            },
+        });
     } catch (err) {
         console.log(err.message);
     }
@@ -98,6 +105,11 @@ const examinerStopTestUpdateDB = async (userArray, test) => {
     await TestResult.destroy({
         where: {
             result: 0,
+        },
+    });
+    await QuestionAnalytics.destroy({
+        where: {
+            probability: null,
         },
     });
     await test.destroy();
@@ -160,6 +172,7 @@ const examinerStopTest = async (req, res) => {
             examiner_email: reqData.examinerEmail,
         },
     });
+
     examinerStopTestUpdateDB(reqData.usersForTest, test)
         .then(res.status(200).send('Updated BD on stop test condition'))
         .catch(err => {

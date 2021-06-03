@@ -1,18 +1,18 @@
 import React from 'react';
-import * as Ai from 'react-icons/ai';
+import * as Bs from 'react-icons/bs';
 import * as Io from 'react-icons/io';
 import * as Md from 'react-icons/md';
 
 export const SidebarData = [
     // admin & examinee
-    {
-        title: 'Home',
-        path: '/home',
-        icon: <Ai.AiFillHome />,
-        colName: 'nav-text',
-        status: 'general',
-        display: true,
-    },
+    // {
+    //     title: 'Home',
+    //     path: '/home',
+    //     icon: <Ai.AiFillHome />,
+    //     colName: 'nav-text',
+    //     status: 'general',
+    //     display: true,
+    // },
     // examinee
     {
         title: 'Join test',
@@ -30,7 +30,23 @@ export const SidebarData = [
         status: 'examinee',
         display: false,
     },
-    // Admin
+    {
+        title: 'Resources',
+        path: '/resources',
+        icon: <Io.IoIosBookmarks />,
+        colName: 'nav-text',
+        status: 'examinee',
+        display: false,
+    },
+    // Examiner
+    {
+        title: 'Test results',
+        path: '/test-results',
+        icon: <Io.IoMdBookmarks />,
+        colName: 'nav-text',
+        status: 'examiner',
+        display: false,
+    },
     {
         title: 'Start test',
         path: '/start-test',
@@ -43,6 +59,15 @@ export const SidebarData = [
         title: 'Statistics',
         path: '/statistics',
         icon: <Io.IoIosPie />,
+        colName: 'nav-text',
+        status: 'examiner',
+        display: false,
+    },
+
+    {
+        title: 'Manage questions',
+        path: '/manage-questions',
+        icon: <Bs.BsQuestionSquareFill />,
         colName: 'nav-text',
         status: 'examiner',
         display: false,

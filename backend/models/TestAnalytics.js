@@ -1,19 +1,19 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define(
-        'user_answer',
+        'test_analytics',
         {
-            userId: {
+            testResultId: {
                 type: DataTypes.INTEGER,
             },
-            questionId: {
+            topicId: {
                 type: DataTypes.INTEGER,
             },
-            // isCorrect: {
-            //     type: DataTypes.BOOLEAN,
-            // },
-            // probability: {
-            //     type: DataTypes.FLOAT,
-            // },
+            currentAbility: {
+                type: DataTypes.FLOAT,
+            },
+            isCorrect: {
+                type: DataTypes.BOOLEAN,
+            },
         },
         {
             underscored: true,

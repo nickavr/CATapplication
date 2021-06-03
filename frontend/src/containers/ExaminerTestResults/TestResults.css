@@ -1,0 +1,16 @@
+.test-results-page {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--base-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.test-results-contents {
+    margin-top: -20%;
+    height: 40%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}

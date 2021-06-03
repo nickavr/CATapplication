@@ -1,18 +1,38 @@
 const sequelize = require('../models').sequelize;
-const CurrentTest = require('../models').CurrentTest;
-const User = require('../models').User;
+const TestResult = require('../models').TestResult;
+const TestAnalytics = require('../models').TestAnalytics;
 const CATdata = require('../models').CatData;
-const computeProbability = require('../algorithm/ComputeProbability')
-    .computeProbability;
+const computeProbability =
+    require('../algorithm/ComputeProbability').computeProbability;
 const computeIIF = require('../algorithm/IIF').computeIIF;
 const scoreToZScore = require('../algorithm/scoreToZScore').scoreToZScore;
-const computeNewAbility = require('../algorithm/CandidateAbility')
-    .computeNewAbility;
+const computeNewAbility =
+    require('../algorithm/CandidateAbility').computeNewAbility;
 const computeSE = require('../algorithm/StandardError').computeSE;
 
 //GET
 
 //POST
+const addTestAnalytics = async (questionResponse, currentAbility, userId) => {
+    try {
+        let testResult = await TestResult.findOne({
+            where: {
+                userId: userId,
+            },
+            order: [['date', 'DESC']],
+        });
+
+        await TestAnalytics.create({
+            testResultId: testResult.id,
+            topicId: null,
+            currentAbility: currentAbility,
+            isCorrect: questionResponse,
+        });
+    } catch (err) {
+        throw new Error(err.message);
+    }
+};
+
 const setCatData = async (req, res) => {
     let currentData = await CATdata.findOne({
         where: { userId: req.body.userId },
@@ -63,6 +83,12 @@ const setCatData = async (req, res) => {
             updatedCatData.probability_sum,
             updatedCatData.response_sum,
             updatedCatData.iif_sum
+        );
+
+        await addTestAnalytics(
+            questionResponse,
+            newEstimatedAbility,
+            req.body.userId
         );
 
         let newStdError = computeSE(updatedCatData.iif_sum);

@@ -1,11 +1,24 @@
+.start-test-page {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--base-light);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
 .start-test-container {
     display: flex;
-    justify-content: space-evenly;
-    margin: 5% auto;
+    justify-content: center;
+    align-items: center;
     width: 30%;
+    height: 40%;
+    margin-top: 10%;
 }
 .start-test-form {
     flex-grow: 4;
+    padding: 7%;
+    background-color: #fff;
+    box-shadow: 0 6px 7px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
 }
 
 /* Overriding element hover from multiple select */

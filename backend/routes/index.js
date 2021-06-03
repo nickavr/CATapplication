@@ -6,9 +6,11 @@ const roleController = require('../controllers/RoleController');
 const currentTestController = require('../controllers/CurrentTestController');
 const questionController = require('../controllers/QuestionController');
 const catDataController = require('../controllers/CatDataController');
+const testResultController = require('../controllers/TestResultsController');
 const userAnswerController = require('../controllers/UserAnswerController');
+const resourceComtroller = require('../controllers/ResourceController');
+const testAnalyticsController = require('../controllers/TestAnalyticsContoller');
 const JWTmiddleware = require('../Middleware/JWT');
-const { CurrentTest } = require('../models');
 
 //AUTH:
 router.post('/login', loginController.loginAuth);
@@ -53,6 +55,10 @@ router.get(
     questionController.getNextQuestion
 );
 router.post('/user-answers', questionController.addUserAnswer);
+router.post('/questions', questionController.addNewQuestion);
+router.get('/questions/choices', questionController.getAllQuestionsAndAnswers);
+router.put('/questions/:id', questionController.updateQuestion);
+router.delete('/questions/:id', questionController.deleteQuestion);
 
 //CAT-DATA
 router.post('/cat-data', catDataController.setCatData);
@@ -63,5 +69,26 @@ router.post(
     userAnswerController.postAnswerProbability
 );
 router.put('/questions', userAnswerController.updateQuestionsDifficulty);
+
+//TEST-RESULTS
+router.get(
+    '/results/dates/:email',
+    testResultController.getAllDatesForExaminer
+);
+router.post(
+    '/results/dates/:id',
+    testResultController.getAllDatesForCandidates
+);
+router.post('/results', testResultController.getResultsData);
+
+//TEST-ANALYTICS
+router.get('/topics', testAnalyticsController.getAllTopics);
+router.post(
+    '/test/analytics',
+    testAnalyticsController.getTestAnalyticsForCandidate
+);
+
+//resources
+// router.get('/resources', resourceComtroller.getLink); //test
 
 module.exports = router;

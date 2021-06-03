@@ -5,9 +5,11 @@ import cogoToast from 'cogo-toast';
 import './LandingPage.css';
 let credentials = require('../../config/google-credentials.json');
 const URL = require('../../config/url-info.json');
+const UserService = require('../../Services/UserService');
 //FIXME: env links not visible
 
 function LandingPage(props, context) {
+    const BreakException = {};
     const responseGoogleOnSuccess = response => {
         //TODO: uncomment validation for only accepting institutional emails:
         // if (!response.Is.ot.includes('ase')) {
@@ -37,7 +39,23 @@ function LandingPage(props, context) {
                     heading: 'Welcome!',
                 });
                 localStorage.setItem('currentUser', JSON.stringify(res.data));
-                props.history.push('/home');
+                let statusArray = UserService.getUserStatus();
+                console.log(statusArray);
+
+                try {
+                    statusArray.forEach(element => {
+                        // console.log(element.role_name === 'examiner');
+                        if (element.role_name === 'examiner') {
+                            props.history.push('/start-test');
+                            throw BreakException;
+                        } else if (element.role_name === 'examinee') {
+                            props.history.push('/join-test');
+                            throw BreakException;
+                        }
+                    });
+                } catch (err) {
+                    if (err !== BreakException) throw err;
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -56,7 +74,7 @@ function LandingPage(props, context) {
         <header className="landingPage-container">
             <div className="hero-textbox">
                 <h1>
-                    Welcome to AdapTest. <br />
+                    Welcome to Testerly. <br />
                     Use your institutional email.
                 </h1>
                 <GoogleLogin

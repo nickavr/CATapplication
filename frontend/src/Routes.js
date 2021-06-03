@@ -1,20 +1,17 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LandingPage from './containers/LandingPage/LandingPage';
-import HomePage from './containers/HomePage/HomePage';
+import ManageQuestions from './containers/ManageQuestionsPage/ManageQuestionsPage';
 import StartTestPage from './containers/StartTestPage/StartTestPage';
 import QuestionComponent from './components/QuestionComponent/QuestionComponent';
 import JoinTestPage from './containers/JoinTestPage/JoinTestPage';
+import ExaminerStatsPage from './containers/ExaminerStatisticsPage/ExaminerStatisticsPage';
+import TestResults from './containers/ExaminerTestResults/TestResults';
+import CandidateAnalytics from './containers/CandidateAnalyticsPage/CandidateAnalytics';
+import ResourcesPage from './containers/ResourcesPage/ResourcesPage';
 import SideMenu from './components/SideBarMenu/SBM';
 import ProtectedRoute from './ProtectedRoute';
-import { useState } from 'react';
 
 export default function Routes() {
-    const [testState, setTestState] = useState('test state ;)');
-
-    const changeState = () => {
-        setTestState('new testState');
-    };
-
     return (
         <Router>
             <Switch>
@@ -22,11 +19,8 @@ export default function Routes() {
                 <div className="pages">
                     <SideMenu />
                     <Switch>
-                        <ProtectedRoute path="/home">
-                            <HomePage
-                                testState={testState}
-                                changeState={changeState}
-                            />
+                        <ProtectedRoute path="/test-results">
+                            <TestResults />
                         </ProtectedRoute>
                         <ProtectedRoute path="/start-test">
                             <StartTestPage />
@@ -36,6 +30,18 @@ export default function Routes() {
                         </ProtectedRoute>
                         <ProtectedRoute path="/question">
                             <QuestionComponent />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/statistics">
+                            <ExaminerStatsPage />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/manage-questions">
+                            <ManageQuestions />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/analytics">
+                            <CandidateAnalytics />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/resources">
+                            <ResourcesPage />
                         </ProtectedRoute>
                     </Switch>
                 </div>
