@@ -1,0 +1,13 @@
+.resources-page {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--base-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.resources-table {
+    height: 40%;
+    margin: -10% 10% 5% 15%;
+}

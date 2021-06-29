@@ -9,6 +9,7 @@ function QuestionsTable(props) {
 
     useEffect(() => {
         setData(props.data);
+        console.log(props.data);
     }, [props.data]);
 
     return (

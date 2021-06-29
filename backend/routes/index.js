@@ -8,7 +8,8 @@ const questionController = require('../controllers/QuestionController');
 const catDataController = require('../controllers/CatDataController');
 const testResultController = require('../controllers/TestResultsController');
 const userAnswerController = require('../controllers/UserAnswerController');
-const resourceComtroller = require('../controllers/ResourceController');
+const resourceController = require('../controllers/ResourceController');
+const topicsController = require('../controllers/TopicsController');
 const testAnalyticsController = require('../controllers/TestAnalyticsContoller');
 const JWTmiddleware = require('../Middleware/JWT');
 
@@ -88,7 +89,10 @@ router.post(
     testAnalyticsController.getTestAnalyticsForCandidate
 );
 
-//resources
-// router.get('/resources', resourceComtroller.getLink); //test
+//Resources
+router.post('/resources', resourceController.getLinks);
+
+//Topics
+router.get('/topics', topicsController.getAllTopics);
 
 module.exports = router;
